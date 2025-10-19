@@ -31,6 +31,19 @@
         .icon {
             @apply w-12 h-12 text-teal-500 mb-4;
         }
+        /* Custom styles for charts */
+        @keyframes grow {
+            from {
+                transform: scaleX(0);
+            }
+            to {
+                transform: scaleX(1);
+            }
+        }
+        .chart-bar {
+            animation: grow 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            transform-origin: left;
+        }
     </style>
 </head>
 <body class="text-slate-700">
@@ -71,72 +84,122 @@
             </div>
         </section>
 
-        <!-- Section 2: Investment Metrics -->
+        <!-- Section 2: Investment Metrics with Charts -->
         <section class="mb-20 bg-slate-100 py-16 rounded-2xl">
             <h2 class="section-title">Balcón vs. Sin Balcón: El Impacto en la Inversión</h2>
-            <p class="section-subtitle">La presencia de un balcón no solo aumenta el precio, sino que mejora todas las métricas clave de rendimiento de un activo inmobiliario universitario.</p>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Metric Card 1 -->
-                <div class="stat-card">
-                    <h3 class="font-bold text-xl text-slate-800">Precio de Venta</h3>
-                    <p class="text-2xl font-bold text-green-600 my-2">+ 5.000 € (mínimo)</p>
-                    <p class="text-sm text-slate-500">Un balcón incrementa el valor de forma directa y reduce el tiempo en el mercado al atraer a un público más amplio. <span class="font-semibold block mt-1">Fuente: Mercado Finlandia.</span></p>
+            <p class="section-subtitle">Los datos demuestran que la presencia de un balcón no es un gasto, sino una inversión que mejora drásticamente las métricas clave de rendimiento.</p>
+            <div class="max-w-4xl mx-auto space-y-10 px-4">
+                <!-- Chart 1: Sale Price Premium -->
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Prima en el Precio de Venta</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <span class="w-32 text-sm font-semibold text-slate-600">Sin Balcón</span>
+                            <div class="flex-1 h-10 bg-slate-300 rounded-r-md flex items-center justify-end pr-2 text-slate-700 font-bold">Valor Base</div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 text-sm font-semibold text-teal-700">Con Balcón</span>
+                            <div class="flex-1 bg-teal-500 rounded-r-md h-10 relative">
+                                <div class="chart-bar absolute top-0 left-0 h-full bg-teal-600 rounded-r-md" style="width: 100%;">
+                                    <div class="absolute inset-0 flex items-center justify-end pr-2 text-white font-bold text-lg">+ 5.000€ o más</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Metric Card 2 -->
-                <div class="stat-card">
-                    <h3 class="font-bold text-xl text-slate-800">Rendimiento por Alquiler</h3>
-                    <p class="text-2xl font-bold text-green-600 my-2">+ 3-5% (potencial)</p>
-                    <p class="text-sm text-slate-500">La alta demanda por servicios de calidad permite fijar alquileres premium, aumentando los ingresos operativos brutos.</p>
+
+                <!-- Chart 2: Rental Yield -->
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Aumento del Rendimiento por Alquiler</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <span class="w-32 text-sm font-semibold text-slate-600">Sin Balcón</span>
+                            <div class="h-10 bg-slate-300 rounded-r-md flex items-center justify-end pr-2 text-slate-700 font-bold" style="width: 70%;">Rendimiento Estándar</div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 text-sm font-semibold text-teal-700">Con Balcón</span>
+                            <div class="h-10 bg-teal-500 rounded-r-md relative" style="width: 75%;">
+                                <div class="chart-bar absolute top-0 left-0 h-full bg-teal-600 rounded-r-md" style="width: 100%;">
+                                     <div class="absolute inset-0 flex items-center justify-end pr-2 text-white font-bold text-lg">+3-5%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Metric Card 3 -->
-                <div class="stat-card">
-                    <h3 class="font-bold text-xl text-slate-800">Tasa de Vacancia</h3>
-                    <p class="text-2xl font-bold text-red-600 my-2">Menor</p>
-                    <p class="text-sm text-slate-500">Mayor satisfacción se traduce en mayores tasas de renovación, reduciendo costos y períodos sin ocupación.</p>
-                </div>
-                <!-- Metric Card 4 -->
-                <div class="stat-card lg:col-span-1">
-                     <h3 class="font-bold text-xl text-slate-800">Velocidad de Venta</h3>
-                    <p class="text-2xl font-bold text-green-600 my-2">Más Rápida</p>
-                    <p class="text-sm text-slate-500">Un activo más deseable se vende más rápido, disminuyendo costos de mantenimiento y riesgo de mercado.</p>
-                </div>
-                <!-- Metric Card 5 -->
-                <div class="stat-card lg:col-span-2">
-                     <h3 class="font-bold text-xl text-slate-800">Público Objetivo</h3>
-                    <p class="text-2xl font-bold text-blue-600 my-2">Estudiantes Premium</p>
-                    <p class="text-sm text-slate-500">Atrae a estudiantes internacionales y de posgrado con mayor poder adquisitivo, que buscan una experiencia de vida integral y de alta calidad.</p>
+
+                <!-- Chart 3: Time on Market -->
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Reducción del Tiempo en el Mercado</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <span class="w-32 text-sm font-semibold text-slate-600">Sin Balcón</span>
+                            <div class="h-10 bg-slate-300 rounded-r-md relative" style="width: 100%;">
+                                <div class="chart-bar absolute top-0 left-0 h-full bg-slate-400 rounded-r-md" style="width: 100%;">
+                                    <div class="absolute inset-0 flex items-center justify-center text-white font-bold">Tiempo Base</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 text-sm font-semibold text-teal-700">Con Balcón</span>
+                            <div class="h-10 bg-teal-300 rounded-r-md relative" style="width: 70%;">
+                               <div class="chart-bar absolute top-0 left-0 h-full bg-teal-600 rounded-r-md" style="width: 100%;">
+                                    <div class="absolute inset-0 flex items-center justify-center text-white font-bold">Venta más rápida</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Global Perspective -->
+        <!-- Section 3: Global Perspective with Chart -->
         <section class="mb-20">
             <h2 class="section-title">Una Perspectiva Global</h2>
             <p class="section-subtitle">La importancia estratégica de un balcón varía según la madurez del mercado, pero la tendencia es universal: la demanda de calidad y espacio exterior está en auge.</p>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- UK -->
-                <div class="text-center p-4">
-                    <img src="https://placehold.co/100x75/00247d/ffffff?text=UK" alt="Bandera del Reino Unido" class="mx-auto mb-4 rounded-md shadow-md">
-                    <h3 class="font-bold text-xl text-slate-800">Reino Unido</h3>
-                    <p class="text-slate-600 mt-2">Mercado maduro. El balcón es una <span class="font-semibold text-red-700">necesidad competitiva</span>. Su ausencia es un riesgo.</p>
-                </div>
-                <!-- Spain -->
-                <div class="text-center p-4">
-                    <img src="https://placehold.co/100x75/c60b1e/ffc400?text=ES" alt="Bandera de España" class="mx-auto mb-4 rounded-md shadow-md">
-                    <h3 class="font-bold text-xl text-slate-800">España</h3>
-                    <p class="text-slate-600 mt-2">Alto crecimiento, con solo <span class="font-bold">~7%</span> de tasa de provisión. El balcón es un <span class="font-semibold text-green-700">diferenciador clave</span> que impulsa primas.</p>
-                </div>
-                <!-- Portugal -->
-                <div class="text-center p-4">
-                     <img src="https://placehold.co/100x75/006600/ff0000?text=PT" alt="Bandera de Portugal" class="mx-auto mb-4 rounded-md shadow-md">
-                    <h3 class="font-bold text-xl text-slate-800">Portugal</h3>
-                    <p class="text-slate-600 mt-2">En crecimiento. Ya se considera una <span class="font-semibold text-blue-700">característica estándar</span> esperada en nuevas construcciones.</p>
-                </div>
-                 <!-- Hungary -->
-                <div class="text-center p-4">
-                     <img src="https://placehold.co/100x75/ce2939/ffffff?text=HU" alt="Bandera de Hungría" class="mx-auto mb-4 rounded-md shadow-md">
-                    <h3 class="font-bold text-xl text-slate-800">Hungría</h3>
-                    <p class="text-slate-600 mt-2">Segmento premium emergente. Una característica de lujo para <span class="font-semibold text-yellow-700">maximizar el alquiler</span> en un mercado desabastecido.</p>
+            
+            <div class="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-slate-200">
+                <h3 class="text-2xl font-bold text-center text-slate-800 mb-8">Valor Estratégico del Balcón por País</h3>
+                <div class="space-y-6">
+                    <!-- UK -->
+                    <div class="grid grid-cols-4 items-center gap-4">
+                        <div class="font-bold text-slate-700 flex items-center">
+                            <img src="https://placehold.co/40x30/00247d/ffffff?text=UK" alt="Bandera UK" class="mr-3 rounded shadow">
+                            <span>Reino Unido</span>
+                        </div>
+                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
+                            <div class="chart-bar bg-red-600 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" style="width: 95%;">Necesidad Competitiva</div>
+                        </div>
+                    </div>
+                    <!-- Portugal -->
+                    <div class="grid grid-cols-4 items-center gap-4">
+                        <div class="font-bold text-slate-700 flex items-center">
+                            <img src="https://placehold.co/40x30/006600/ff0000?text=PT" alt="Bandera PT" class="mr-3 rounded shadow">
+                            <span>Portugal</span>
+                        </div>
+                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
+                            <div class="chart-bar bg-blue-600 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" style="width: 80%;">Característica Estándar</div>
+                        </div>
+                    </div>
+                    <!-- Spain -->
+                    <div class="grid grid-cols-4 items-center gap-4">
+                        <div class="font-bold text-slate-700 flex items-center">
+                            <img src="https://placehold.co/40x30/c60b1e/ffc400?text=ES" alt="Bandera ES" class="mr-3 rounded shadow">
+                            <span>España</span>
+                        </div>
+                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
+                            <div class="chart-bar bg-green-600 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" style="width: 65%;">Diferenciador Clave</div>
+                        </div>
+                    </div>
+                    <!-- Hungary -->
+                    <div class="grid grid-cols-4 items-center gap-4">
+                        <div class="font-bold text-slate-700 flex items-center">
+                            <img src="https://placehold.co/40x30/ce2939/ffffff?text=HU" alt="Bandera HU" class="mr-3 rounded shadow">
+                            <span>Hungría</span>
+                        </div>
+                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
+                            <div class="chart-bar bg-yellow-500 h-8 rounded-full flex items-center justify-center text-slate-800 text-sm font-semibold" style="width: 50%;">Activo Premium</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
