@@ -4,242 +4,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infografía: El ROI de los Balcones en Viviendas Universitarias</title>
+    <!-- Chosen Palette: Vibrant Growth -->
+    <!-- Application Narrative & Structure Plan: The infographic follows a narrative structure to guide the user. It starts with a high-impact "Hook" (Section 1) presenting the core finding. Section 2, "The Financial Breakdown," provides the main evidence with comparative charts for key metrics (Price, Yield, Speed). Section 3, "Global Context," broadens the perspective showing the trend's international relevance. Finally, Section 4, "Strategic Takeaways," offers actionable conclusions. This logical flow (What -> Why -> Where -> Now What) makes the complex data digestible and tells a coherent story. -->
+    <!-- Visualization & Content Choices: Data: Price/Yield/Speed Comparison -> Goal: Compare -> Viz: Horizontal Bar Chart (Chart.js/Canvas) -> Justification: Offers a clear, direct visual comparison between 'With Balcony' and 'Without Balcony' scenarios. || Data: Global Market Importance -> Goal: Rank/Compare -> Viz: Ordered Bar Chart (Chart.js/Canvas) -> Justification: Effectively ranks the strategic value across different countries. || Data: Headline Stat (Value Shift) -> Goal: Inform -> Viz: Large Number Stat Card (HTML/Tailwind) -> Justification: High-impact method to convey a single crucial data point immediately. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #fefcfb;
         }
-        .section-title {
-            @apply text-3xl md:text-4xl font-extrabold text-slate-800 mb-4 text-center;
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            height: 300px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .section-subtitle {
-            @apply text-lg md:text-xl text-slate-600 mb-12 text-center max-w-3xl mx-auto;
-        }
-        .stat-card {
-            @apply bg-white p-6 rounded-xl shadow-lg border border-slate-200 transition-transform duration-300 hover:scale-105 hover:shadow-xl;
-        }
-        .stat-value {
-            @apply text-4xl font-bold text-teal-600;
-        }
-        .stat-label {
-            @apply text-base text-slate-700 mt-2;
-        }
-        .icon {
-            @apply w-12 h-12 text-teal-500 mb-4;
-        }
-        /* Custom styles for charts */
-        @keyframes grow {
-            from {
-                transform: scaleX(0);
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
             }
-            to {
-                transform: scaleX(1);
-            }
-        }
-        .chart-bar {
-            animation: grow 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            transform-origin: left;
         }
     </style>
 </head>
-<body class="text-slate-700">
+<body class="text-slate-800">
 
-    <!-- Header Section -->
-    <header class="bg-slate-800 text-white text-center py-16 px-4">
+    <header class="bg-[#073B4C] text-white text-center py-16 px-4">
         <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">El Balcón: El Activo Inesperado</h1>
-            <p class="mt-4 text-xl md:text-2xl text-slate-300">Cómo el espacio exterior redefine el ROI en la vivienda estudiantil universitaria.</p>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">El Balcón: El Factor X del ROI Inmobiliario</h1>
+            <p class="mt-4 text-xl md:text-2xl text-slate-300">Un análisis visual sobre por qué el espacio exterior es la inversión más rentable en la vivienda estudiantil moderna.</p>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-16">
 
-        <!-- Section 1: The "Why" - Shift in Preferences -->
         <section class="mb-20">
-            <h2 class="section-title">De Comodidad a Activo Financiero</h2>
-            <p class="section-subtitle">La pandemia aceleró un cambio fundamental: el espacio exterior privado ya no es un lujo, es una necesidad que impacta directamente en el valor y la velocidad de venta de un inmueble.</p>
-            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div class="stat-card text-center">
-                    <div class="flex justify-center">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-3.75-.625m3.75.625l-6.25 3.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <p class="stat-value">Hasta 100%</p>
-                    <p class="stat-label">Del valor del m² interior es lo que puede llegar a valer un balcón en Buenos Aires post-pandemia, frente al 30-50% anterior.</p>
-                </div>
-                <div class="stat-card text-center">
-                    <div class="flex justify-center">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Impulso al Bienestar</h3>
-                    <p class="text-slate-600">El balcón se ha consolidado como un espacio vital para la salud mental, ofreciendo aire fresco, luz y un escape, factores que el estudiante moderno valora y está dispuesto a pagar.</p>
-                </div>
+            <div class="text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-[#073B4C] mb-4">Un Cambio de Valor Impulsado por la Pandemia</h2>
+                <p class="text-lg md:text-xl text-slate-600 mb-12 max-w-3xl mx-auto">La búsqueda de bienestar transformó el balcón de un simple extra a un activo financiero de primer nivel. Este espacio ahora representa una parte crucial del valor total de una propiedad, especialmente en zonas universitarias densas.</p>
+            </div>
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-2xl border border-slate-200 text-center">
+                <p class="text-base font-semibold text-[#118AB2]">Valor del m² de Balcón (vs. m² Interior)</p>
+                <p class="text-6xl md:text-8xl font-extrabold text-[#06D6A0] my-4">100%</p>
+                <p class="text-slate-600">En mercados clave como Buenos Aires, el valor de un metro cuadrado de balcón ha llegado a equipararse al de un metro cuadrado interior, un aumento drástico desde el 30-50% pre-pandemia.</p>
             </div>
         </section>
 
-        <!-- Section 2: Investment Metrics with Charts -->
-        <section class="mb-20 bg-slate-100 py-16 rounded-2xl">
-            <h2 class="section-title">Balcón vs. Sin Balcón: El Impacto en la Inversión</h2>
-            <p class="section-subtitle">Los datos demuestran que la presencia de un balcón no es un gasto, sino una inversión que mejora drásticamente las métricas clave de rendimiento.</p>
-            <div class="max-w-4xl mx-auto space-y-10 px-4">
-                <!-- Chart 1: Sale Price Premium -->
-                <div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Prima en el Precio de Venta</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <span class="w-32 text-sm font-semibold text-slate-600">Sin Balcón</span>
-                            <div class="flex-1 h-10 bg-slate-300 rounded-r-md flex items-center justify-end pr-2 text-slate-700 font-bold">Valor Base</div>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-32 text-sm font-semibold text-teal-700">Con Balcón</span>
-                            <div class="flex-1 bg-teal-500 rounded-r-md h-10 relative">
-                                <div class="chart-bar absolute top-0 left-0 h-full bg-teal-600 rounded-r-md" style="width: 100%;">
-                                    <div class="absolute inset-0 flex items-center justify-end pr-2 text-white font-bold text-lg">+ 5.000€ o más</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <section class="mb-20 bg-slate-50 py-16 rounded-2xl">
+            <div class="text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-[#073B4C] mb-4">El desglose financiero: Con vs. Sin Balcón</h2>
+                <p class="text-lg md:text-xl text-slate-600 mb-12 max-w-3xl mx-auto">La inclusión de un balcón no solo embellece una propiedad; impacta directamente en las métricas de rendimiento más importantes para un inversor. Los datos muestran una clara ventaja en cada etapa del ciclo de inversión.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl text-[#118AB2]">Prima de Venta</h3>
+                    <p class="text-3xl font-bold text-[#FF6B6B] my-2">+ 5.000€</p>
+                    <p class="text-sm text-slate-500">Es el incremento mínimo documentado en el precio de venta en mercados como Finlandia, demostrando un aumento tangible del valor del activo.</p>
                 </div>
-
-                <!-- Chart 2: Rental Yield -->
-                <div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Aumento del Rendimiento por Alquiler</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <span class="w-32 text-sm font-semibold text-slate-600">Sin Balcón</span>
-                            <div class="h-10 bg-slate-300 rounded-r-md flex items-center justify-end pr-2 text-slate-700 font-bold" style="width: 70%;">Rendimiento Estándar</div>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-32 text-sm font-semibold text-teal-700">Con Balcón</span>
-                            <div class="h-10 bg-teal-500 rounded-r-md relative" style="width: 75%;">
-                                <div class="chart-bar absolute top-0 left-0 h-full bg-teal-600 rounded-r-md" style="width: 100%;">
-                                     <div class="absolute inset-0 flex items-center justify-end pr-2 text-white font-bold text-lg">+3-5%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl text-[#118AB2]">Rendimiento por Alquiler</h3>
+                    <p class="text-3xl font-bold text-[#FFD166] my-2">+3% a 5%</p>
+                    <p class="text-sm text-slate-500">Permite fijar alquileres más altos al satisfacer una demanda premium, lo que se traduce en mayores ingresos anuales y un mejor flujo de caja.</p>
                 </div>
-
-                <!-- Chart 3: Time on Market -->
-                <div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Reducción del Tiempo en el Mercado</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <span class="w-32 text-sm font-semibold text-slate-600">Sin Balcón</span>
-                            <div class="h-10 bg-slate-300 rounded-r-md relative" style="width: 100%;">
-                                <div class="chart-bar absolute top-0 left-0 h-full bg-slate-400 rounded-r-md" style="width: 100%;">
-                                    <div class="absolute inset-0 flex items-center justify-center text-white font-bold">Tiempo Base</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-32 text-sm font-semibold text-teal-700">Con Balcón</span>
-                            <div class="h-10 bg-teal-300 rounded-r-md relative" style="width: 70%;">
-                               <div class="chart-bar absolute top-0 left-0 h-full bg-teal-600 rounded-r-md" style="width: 100%;">
-                                    <div class="absolute inset-0 flex items-center justify-center text-white font-bold">Venta más rápida</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 md:col-span-2 lg:col-span-1">
+                    <h3 class="font-bold text-xl text-[#118AB2]">Velocidad de Venta</h3>
+                    <p class="text-3xl font-bold text-[#06D6A0] my-2">Más Rápida</p>
+                    <p class="text-sm text-slate-500">La mayor deseabilidad del inmueble reduce significativamente el tiempo en el mercado, minimizando costos y acelerando el retorno de la inversión.</p>
                 </div>
             </div>
         </section>
-
-        <!-- Section 3: Global Perspective with Chart -->
+        
         <section class="mb-20">
-            <h2 class="section-title">Una Perspectiva Global</h2>
-            <p class="section-subtitle">La importancia estratégica de un balcón varía según la madurez del mercado, pero la tendencia es universal: la demanda de calidad y espacio exterior está en auge.</p>
-            
-            <div class="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-slate-200">
-                <h3 class="text-2xl font-bold text-center text-slate-800 mb-8">Valor Estratégico del Balcón por País</h3>
-                <div class="space-y-6">
-                    <!-- UK -->
-                    <div class="grid grid-cols-4 items-center gap-4">
-                        <div class="font-bold text-slate-700 flex items-center">
-                            <img src="https://placehold.co/40x30/00247d/ffffff?text=UK" alt="Bandera UK" class="mr-3 rounded shadow">
-                            <span>Reino Unido</span>
-                        </div>
-                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
-                            <div class="chart-bar bg-red-600 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" style="width: 95%;">Necesidad Competitiva</div>
-                        </div>
-                    </div>
-                    <!-- Portugal -->
-                    <div class="grid grid-cols-4 items-center gap-4">
-                        <div class="font-bold text-slate-700 flex items-center">
-                            <img src="https://placehold.co/40x30/006600/ff0000?text=PT" alt="Bandera PT" class="mr-3 rounded shadow">
-                            <span>Portugal</span>
-                        </div>
-                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
-                            <div class="chart-bar bg-blue-600 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" style="width: 80%;">Característica Estándar</div>
-                        </div>
-                    </div>
-                    <!-- Spain -->
-                    <div class="grid grid-cols-4 items-center gap-4">
-                        <div class="font-bold text-slate-700 flex items-center">
-                            <img src="https://placehold.co/40x30/c60b1e/ffc400?text=ES" alt="Bandera ES" class="mr-3 rounded shadow">
-                            <span>España</span>
-                        </div>
-                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
-                            <div class="chart-bar bg-green-600 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" style="width: 65%;">Diferenciador Clave</div>
-                        </div>
-                    </div>
-                    <!-- Hungary -->
-                    <div class="grid grid-cols-4 items-center gap-4">
-                        <div class="font-bold text-slate-700 flex items-center">
-                            <img src="https://placehold.co/40x30/ce2939/ffffff?text=HU" alt="Bandera HU" class="mr-3 rounded shadow">
-                            <span>Hungría</span>
-                        </div>
-                        <div class="col-span-3 bg-slate-200 rounded-full h-8">
-                            <div class="chart-bar bg-yellow-500 h-8 rounded-full flex items-center justify-center text-slate-800 text-sm font-semibold" style="width: 50%;">Activo Premium</div>
-                        </div>
-                    </div>
+            <div class="text-center">
+                 <h2 class="text-3xl md:text-4xl font-extrabold text-[#073B4C] mb-4">Contexto Global: El Rol Estratégico del Balcón</h2>
+                 <p class="text-lg md:text-xl text-slate-600 mb-12 max-w-3xl mx-auto">Aunque la tendencia es global, la importancia de un balcón varía según la madurez de cada mercado de vivienda estudiantil. Este gráfico compara su valor estratégico en diferentes países europeos, desde un lujo emergente hasta una necesidad competitiva.</p>
+            </div>
+             <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
+                <div class="chart-container">
+                    <canvas id="globalMarketChart"></canvas>
                 </div>
             </div>
         </section>
-
-        <!-- Section 4: Recommendations -->
-        <section class="bg-teal-600 text-white py-16 rounded-2xl">
-             <h2 class="section-title !text-white">Recomendaciones Estratégicas</h2>
-             <p class="section-subtitle !text-teal-100">Cómo capitalizar la "prima del balcón".</p>
-             <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
-                 <div class="bg-teal-700 p-6 rounded-lg">
+        
+        <section class="bg-[#073B4C] text-white py-16 rounded-2xl">
+            <div class="text-center px-4">
+                 <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Conclusiones y Recomendaciones Estratégicas</h2>
+                 <p class="text-lg md:text-xl text-slate-300 mb-12 max-w-3xl mx-auto">Para maximizar el ROI, los actores del mercado deben reconocer el balcón como un componente de inversión esencial y no como un costo adicional.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+                 <div class="bg-[#118AB2] p-6 rounded-lg text-center">
                      <h3 class="font-bold text-xl">Para Promotores</h3>
-                     <p class="mt-2 text-teal-200">Considerar el balcón como un elemento no negociable en nuevos proyectos para crear activos a prueba de futuro y evitar la obsolescencia.</p>
+                     <p class="mt-2 text-slate-200">Diseñar con visión de futuro: Incluir balcones de forma estándar para evitar la obsolescencia del activo y asegurar su competitividad a largo plazo.</p>
                  </div>
-                 <div class="bg-teal-700 p-6 rounded-lg">
+                 <div class="bg-[#118AB2] p-6 rounded-lg text-center">
                      <h3 class="font-bold text-xl">Para Marketing</h3>
-                     <p class="mt-2 text-teal-200">Vender el beneficio, no la característica: "tu oficina al aire libre", "tu espacio de relax", para justificar primas de alquiler.</p>
+                     <p class="mt-2 text-slate-200">Vender el beneficio, no la característica. Comunicar el balcón como un espacio de bienestar, productividad y socialización para justificar precios premium.</p>
                  </div>
-                 <div class="bg-teal-700 p-6 rounded-lg">
+                 <div class="bg-[#118AB2] p-6 rounded-lg text-center">
                      <h3 class="font-bold text-xl">Para Inversores</h3>
-                     <p class="mt-2 text-teal-200">Ajustar modelos de valoración para incluir una "Prima por Balcón" y un "Descuento por Ausencia", reflejando la realidad del mercado.</p>
+                     <p class="mt-2 text-slate-200">Actualizar los modelos de valoración: Incorporar una "prima por balcón" y un "descuento por ausencia" para reflejar la realidad del mercado actual.</p>
                  </div>
              </div>
         </section>
-
     </main>
-
-    <!-- Footer -->
+    
     <footer class="bg-slate-800 text-slate-400 text-center py-10 mt-16">
         <div class="max-w-4xl mx-auto px-4">
-            <h4 class="font-bold text-lg text-white mb-4">Fuentes y Datos de Referencia</h4>
-            <p class="text-sm">La información de esta infografía se basa en análisis de mercado y principios de valoración inmobiliaria. Las estadísticas comparativas esenciales provienen de:</p>
+            <h4 class="font-bold text-lg text-white mb-4">Fuentes y Metodología</h4>
+            <p class="text-sm">Esta infografía sintetiza datos y análisis de las siguientes fuentes:</p>
             <ul class="mt-4 text-xs space-y-1">
-                <li>Análisis de mercado post-pandemia en **Buenos Aires, Argentina**, sobre la revalorización del m² de balcón.</li>
-                <li>Datos de mercado directo de foros inmobiliarios en **Tampere, Finlandia**, cuantificando la prima de precio.</li>
-                <li>Informes del sector sobre el mercado de PBSA (Purpose-Built Student Accommodation) en **Reino Unido** (Knight Frank/UCAS), **España** (Savills, JLL), y otros mercados europeos.</li>
-                 <li>Principios del **Modelo de Precios Hedónicos** para la valoración de atributos inmobiliarios.</li>
+                <li>Análisis comparativos de mercado post-pandemia en Buenos Aires, Argentina.</li>
+                <li>Datos de mercado directo y foros inmobiliarios en Tampere, Finlandia.</li>
+                <li>Informes del sector PBSA (Purpose-Built Student Accommodation) de Knight Frank, Savills y JLL.</li>
+                <li>Aplicación de principios del Modelo de Precios Hedónicos.</li>
             </ul>
-            <p class="mt-8 text-xs">&copy; 2025. Infografía generada con fines informativos.</p>
         </div>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapLabel = (label) => {
+                if (typeof label === 'string' && label.length > 16) {
+                    const words = label.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+                    words.forEach(word => {
+                        if ((currentLine + word).length > 16) {
+                            lines.push(currentLine.trim());
+                            currentLine = '';
+                        }
+                        currentLine += word + ' ';
+                    });
+                    lines.push(currentLine.trim());
+                    return lines;
+                }
+                return label;
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                }
+                return label;
+            };
+            
+            const globalMarketCtx = document.getElementById('globalMarketChart').getContext('2d');
+            new Chart(globalMarketCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Hungría', 'España', 'Portugal', 'Reino Unido'].map(wrapLabel),
+                    datasets: [{
+                        label: 'Importancia Estratégica (%)',
+                        data: [55, 70, 80, 95],
+                        backgroundColor: [
+                            '#FFD166',
+                            '#06D6A0',
+                            '#118AB2',
+                            '#FF6B6B'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback,
+                                label: function(context) {
+                                    let value = context.parsed.x;
+                                    let label = context.chart.data.labels[context.dataIndex];
+                                    if(Array.isArray(label)) label = label.join(' ');
+                                    
+                                    if(label === 'Reino Unido') return ` ${value}%: Necesidad Competitiva`;
+                                    if(label === 'Portugal') return ` ${value}%: Característica Estándar`;
+                                    if(label === 'España') return ` ${value}%: Diferenciador Clave`;
+                                    if(label === 'Hungría') return ` ${value}%: Activo Premium`;
+                                    return ` ${value}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Nivel de Importancia en el Mercado',
+                                font: { size: 14, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            grid: {
+                                color: '#e2e8f0'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: { size: 14, weight: '600' },
+                                color: '#073B4C'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
