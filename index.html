@@ -3,384 +3,617 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor de Inventario Pro</title>
+    <title>Mazza Financial Core</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            900: '#1e3a8a',
-                        }
+                        dark: { 900: '#0f172a', 800: '#1e293b', 700: '#334155' },
+                        brand: { 500: '#6366f1', 600: '#4f46e5' }, // Indigo moderno
+                        danger: '#ef4444',
+                        warning: '#f59e0b',
+                        success: '#10b981'
                     }
                 }
             }
         }
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         [x-cloak] { display: none !important; }
-        body { background-color: #f3f4f6; }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+        body { background-color: #f1f5f9; }
+        /* Scrollbar invisible para limpieza */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        
+        /* Timeline Line */
+        .timeline-line::before {
+            content: ''; position: absolute; left: 1.5rem; top: 0; bottom: 0; width: 2px; background: #e2e8f0; z-index: 0;
         }
     </style>
 </head>
 
-<body class="text-gray-800 antialiased" x-data="inventoryApp()" x-init="initData()">
+<body class="text-slate-800 antialiased h-screen flex flex-col md:flex-row overflow-hidden" x-data="financeApp()" x-init="initApp()">
 
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center gap-3">
-                    <div class="bg-brand-600 text-white p-2 rounded-lg shadow-lg">
-                        <i class="fa-solid fa-boxes-stacked fa-lg"></i>
-                    </div>
-                    <span class="font-bold text-xl tracking-tight text-gray-900">Inventario<span class="text-brand-600">Pro</span></span>
-                </div>
-                <div class="flex items-center gap-4">
-                    <a href="https://github.com" target="_blank" class="text-gray-500 hover:text-gray-900 transition">
-                        <i class="fa-brands fa-github fa-xl"></i>
-                    </a>
-                </div>
+    <nav class="bg-dark-900 text-white md:w-64 w-full md:h-full h-16 fixed md:relative bottom-0 z-50 flex md:flex-col flex-row justify-between items-center md:items-start md:p-6 px-4 shadow-2xl">
+        <div class="hidden md:flex items-center gap-3 mb-10 w-full">
+            <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center font-bold text-xl">M</div>
+            <div>
+                <h1 class="font-bold text-lg leading-tight">Mazza<span class="text-brand-500">ERP</span></h1>
+                <p class="text-xs text-slate-400">Personal Finance</p>
             </div>
         </div>
+
+        <div class="flex md:flex-col flex-row justify-around w-full gap-2">
+            <button @click="view = 'dashboard'" :class="{'bg-brand-600 text-white': view === 'dashboard', 'text-slate-400 hover:text-white hover:bg-dark-800': view !== 'dashboard'}" class="p-3 rounded-xl flex items-center gap-3 transition-all w-full md:justify-start justify-center">
+                <i class="fa-solid fa-chart-pie text-xl"></i>
+                <span class="hidden md:block font-medium">Dashboard</span>
+            </button>
+            
+            <button @click="view = 'timeline'" :class="{'bg-brand-600 text-white': view === 'timeline', 'text-slate-400 hover:text-white hover:bg-dark-800': view !== 'timeline'}" class="p-3 rounded-xl flex items-center gap-3 transition-all w-full md:justify-start justify-center">
+                <i class="fa-solid fa-stream text-xl"></i>
+                <span class="hidden md:block font-medium">Historia</span>
+            </button>
+
+            <button @click="view = 'add'" :class="{'bg-brand-600 text-white shadow-lg shadow-brand-500/30': view === 'add', 'text-slate-400 hover:text-white hover:bg-dark-800': view !== 'add'}" class="p-3 rounded-xl flex items-center gap-3 transition-all w-full md:justify-start justify-center">
+                <i class="fa-solid fa-plus-circle text-xl"></i>
+                <span class="hidden md:block font-medium">Nueva Compra</span>
+            </button>
+
+            <button @click="view = 'settings'" :class="{'bg-brand-600 text-white': view === 'settings', 'text-slate-400 hover:text-white hover:bg-dark-800': view !== 'settings'}" class="p-3 rounded-xl flex items-center gap-3 transition-all w-full md:justify-start justify-center">
+                <i class="fa-solid fa-sliders text-xl"></i>
+                <span class="hidden md:block font-medium">Ajustes</span>
+            </button>
+        </div>
+
+        <a href="https://github.com/mazzaroli/" target="_blank" class="hidden md:flex items-center gap-3 mt-auto p-3 rounded-xl text-slate-400 hover:text-white transition w-full">
+            <i class="fa-brands fa-github text-xl"></i>
+            <span class="font-medium text-sm">/mazzaroli</span>
+        </a>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-1 overflow-y-auto no-scrollbar relative p-4 md:p-8 pb-24 md:pb-8">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-500 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500 uppercase">Items Totales</p>
-                    <p class="text-3xl font-bold text-gray-900" x-text="inventory.length"></p>
+        <div class="md:hidden flex justify-between items-center mb-6">
+            <h1 class="font-bold text-2xl text-dark-900">Mazza<span class="text-brand-600">ERP</span></h1>
+            <a href="https://github.com/mazzaroli/" target="_blank" class="text-dark-900"><i class="fa-brands fa-github fa-xl"></i></a>
+        </div>
+
+        <div x-show="view === 'dashboard'" x-transition.opacity.duration.300ms>
+            <h2 class="text-2xl font-bold text-dark-900 mb-6">Mapa Visual de Gastos</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover relative overflow-hidden">
+                    <div class="absolute right-0 top-0 p-4 opacity-10">
+                        <i class="fa-solid fa-crystal-ball fa-4x text-brand-600"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Proyección Fin de Mes</p>
+                    <h3 class="text-3xl font-extrabold text-dark-900" x-text="formatMoney(calculatePrediction())"></h3>
+                    <div class="mt-4 flex items-center gap-2 text-sm">
+                        <span x-show="calculatePrediction() > budget" class="text-danger font-bold"><i class="fa-solid fa-arrow-trend-up"></i> Peligro</span>
+                        <span x-show="calculatePrediction() <= budget" class="text-success font-bold"><i class="fa-solid fa-shield-heart"></i> Bajo Control</span>
+                        <span class="text-slate-400">vs Presupuesto</span>
+                    </div>
                 </div>
-                <div class="bg-brand-50 p-3 rounded-full text-brand-600">
-                    <i class="fa-solid fa-list-ol fa-xl"></i>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                    <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Yo vs Mes Pasado</p>
+                    <div class="flex items-end gap-3">
+                        <h3 class="text-3xl font-extrabold text-dark-900" x-text="getComparisonPercentage()"></h3>
+                        <span class="text-xs text-slate-400 mb-1.5" x-text="comparisonText"></span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 mt-4 overflow-hidden">
+                        <div class="h-2 rounded-full transition-all duration-1000" 
+                             :class="isSpendingMore ? 'bg-danger' : 'bg-success'" 
+                             :style="`width: ${Math.min(Math.abs(percentageDiff), 100)}%`"></div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-emerald-500 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500 uppercase">Valor Total</p>
-                    <p class="text-3xl font-bold text-gray-900" x-text="formatCurrency(calculateTotalValue())"></p>
-                </div>
-                <div class="bg-emerald-50 p-3 rounded-full text-emerald-600">
-                    <i class="fa-solid fa-sack-dollar fa-xl"></i>
+
+                <div class="bg-gradient-to-br from-dark-900 to-dark-800 text-white p-6 rounded-2xl shadow-lg card-hover">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-semibold text-slate-400 uppercase mb-1">Estado Financiero</p>
+                            <h3 class="text-xl font-bold mb-2">
+                                <span x-show="currentSpent <= budget * 0.5">Zen Financiero 🧘‍♂️</span>
+                                <span x-show="currentSpent > budget * 0.5 && currentSpent <= budget * 0.85">Navegando ⛵</span>
+                                <span x-show="currentSpent > budget * 0.85">Alerta Roja 🚨</span>
+                            </h3>
+                        </div>
+                        <i class="fa-solid fa-trophy text-yellow-400 text-2xl"></i>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-2">Logro: Mantener gastos hormiga bajo 5%</p>
+                    <div class="mt-3 text-xs bg-white/10 rounded px-2 py-1 inline-block">
+                        <i class="fa-solid fa-clock"></i> Cierre de mes: <span x-text="daysLeft"></span> días
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-brand-600 to-brand-700 rounded-xl shadow-sm p-6 text-white flex flex-col justify-center items-start gap-2">
-                <h3 class="font-bold text-lg">Acciones</h3>
-                <button @click="exportToCSV()" class="text-sm bg-white/20 hover:bg-white/30 transition px-4 py-2 rounded-lg flex items-center gap-2 w-full justify-center">
-                    <i class="fa-solid fa-file-csv"></i> Exportar CSV
-                </button>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                <div class="flex justify-between mb-2">
+                    <span class="font-bold text-dark-900">Tensión de Presupuesto</span>
+                    <span class="font-mono text-slate-500"><span x-text="formatMoney(currentSpent)"></span> / <span x-text="formatMoney(budget)"></span></span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden shadow-inner">
+                    <div class="h-full transition-all duration-1000 flex items-center justify-end pr-2 text-[10px] text-white font-bold relative"
+                         :class="{
+                             'bg-success': (currentSpent/budget) < 0.5,
+                             'bg-warning': (currentSpent/budget) >= 0.5 && (currentSpent/budget) < 0.85,
+                             'bg-danger': (currentSpent/budget) >= 0.85
+                         }"
+                         :style="`width: ${(currentSpent/budget)*100}%`">
+                         <span x-show="(currentSpent/budget) > 0.1" x-text="Math.round((currentSpent/budget)*100) + '%'"></span>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-400 mt-2 text-center" x-text="budgetMessage"></p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-dark-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-bullseye text-brand-600"></i> Radar de Categorías</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-400 text-center mt-2">Equilibrio de gastos por área</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-dark-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-heart-pulse text-pink-500"></i> Análisis Emocional</h3>
+                    <div class="flex items-center">
+                        <div class="w-1/2 h-64">
+                            <canvas id="emotionChart"></canvas>
+                        </div>
+                        <div class="w-1/2 pl-4">
+                            <h4 class="font-bold text-lg mb-2">Diagnóstico</h4>
+                            <p class="text-sm text-slate-600" x-text="emotionalDiagnosis"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                <h3 class="font-bold text-dark-900 mb-4">🏆 Top Fugas de Dinero (Comercios)</h3>
+                <div class="h-60 w-full">
+                    <canvas id="vendorChart"></canvas>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-24">
-                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-pen-to-square text-brand-600"></i>
-                        <span x-text="isEditing ? 'Editar Producto' : 'Nuevo Producto'"></span>
-                    </h2>
+        <div x-show="view === 'timeline'" x-cloak x-transition.opacity>
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-2xl font-bold text-dark-900 mb-6">Historia de Compras</h2>
+                
+                <div class="relative timeline-line space-y-8">
+                    <template x-for="item in sortedItems" :key="item.id">
+                        <div class="relative pl-12">
+                            <div class="absolute left-0 top-1 w-12 h-12 rounded-full border-4 border-slate-50 flex items-center justify-center shadow-sm z-10"
+                                 :class="{
+                                    'bg-green-100 text-green-600': item.emotion === 'Necesario',
+                                    'bg-yellow-100 text-yellow-600': item.emotion === 'Antojo',
+                                    'bg-purple-100 text-purple-600': item.emotion === 'Ocio',
+                                    'bg-red-100 text-red-600': item.emotion === 'Urgencia',
+                                    'bg-blue-100 text-blue-600': !['Necesario','Antojo','Ocio','Urgencia'].includes(item.emotion)
+                                 }">
+                                <i class="fa-solid" :class="getCategoryIcon(item.category)"></i>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-lg text-dark-900" x-text="item.vendor"></h3>
+                                        <p class="text-sm text-slate-500" x-text="item.name"></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="block font-bold text-lg text-dark-900" x-text="formatMoney(item.price)"></span>
+                                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500" x-text="item.paymentMethod"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-3 mt-3 pt-3 border-t border-slate-50">
+                                    <span class="text-xs font-semibold px-2 py-1 rounded bg-slate-100 text-slate-600 uppercase" x-text="item.category"></span>
+                                    <span class="text-xs flex items-center gap-1" 
+                                          :class="{
+                                              'text-green-600': item.emotion === 'Necesario',
+                                              'text-pink-500': item.emotion === 'Antojo'
+                                          }">
+                                        <i class="fa-solid fa-tag"></i> <span x-text="item.emotion"></span>
+                                    </span>
+                                    <span class="text-xs text-slate-400 ml-auto" x-text="formatDate(item.date)"></span>
+                                    
+                                    <button @click="deleteItem(item.id)" class="text-slate-300 hover:text-red-500 transition ml-2"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                     
-                    <form @submit.prevent="saveItem">
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Producto</label>
-                            <input type="text" x-model="form.name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="Ej: Laptop Dell">
-                        </div>
+                    <div x-show="items.length === 0" class="text-center py-10 text-slate-400">
+                        <i class="fa-solid fa-ghost fa-3x mb-3"></i>
+                        <p>Tu historia financiera está vacía... por ahora.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Cantidad</label>
-                                <input type="number" x-model.number="form.quantity" min="1" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="0">
+        <div x-show="view === 'add'" x-cloak x-transition.scale.origin.bottom>
+            <div class="max-w-xl mx-auto mt-4">
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div class="bg-dark-900 text-white p-6">
+                        <h2 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-receipt"></i> Registrar Nueva Compra</h2>
+                        <p class="text-slate-400 text-sm">Alimenta la base de datos para obtener inteligencia.</p>
+                    </div>
+                    
+                    <form @submit.prevent="saveItem" class="p-8 space-y-6">
+                        
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">¿Qué compraste?</label>
+                                <input type="text" x-model="form.name" required placeholder="Ej: Supermercado Semanal" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Precio Unitario</label>
-                                <input type="number" step="0.01" x-model.number="form.price" min="0" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="0.00">
+
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Monto ($)</label>
+                                <input type="number" step="0.01" x-model.number="form.price" required placeholder="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 transition font-mono font-bold">
+                            </div>
+
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Comercio / Lugar</label>
+                                <input type="text" x-model="form.vendor" required placeholder="Ej: Carrefour" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
+                            </div>
+
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Categoría</label>
+                                <select x-model="form.category" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
+                                    <option value="Comida">🍔 Comida</option>
+                                    <option value="Transporte">🚗 Transporte</option>
+                                    <option value="Servicios">💡 Servicios</option>
+                                    <option value="Ropa">👕 Ropa</option>
+                                    <option value="Ocio">🎮 Ocio</option>
+                                    <option value="Salud">💊 Salud</option>
+                                    <option value="Hogar">🏠 Hogar</option>
+                                    <option value="Educación">📚 Educación</option>
+                                    <option value="Otros">📦 Otros</option>
+                                </select>
+                            </div>
+
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Método de Pago</label>
+                                <select x-model="form.paymentMethod" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Débito">Débito</option>
+                                    <option value="Crédito">Crédito</option>
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Cripto">Cripto</option>
+                                </select>
+                            </div>
+
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Estado Emocional (Honestidad Brutal)</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button type="button" @click="form.emotion = 'Necesario'" :class="form.emotion === 'Necesario' ? 'bg-green-100 border-green-500 text-green-700' : 'bg-white border-slate-200 text-slate-500'" class="border rounded-lg py-2 px-3 text-sm font-medium transition hover:bg-green-50">Necesario 🛡️</button>
+                                    <button type="button" @click="form.emotion = 'Antojo'" :class="form.emotion === 'Antojo' ? 'bg-pink-100 border-pink-500 text-pink-700' : 'bg-white border-slate-200 text-slate-500'" class="border rounded-lg py-2 px-3 text-sm font-medium transition hover:bg-pink-50">Antojo 🍩</button>
+                                    <button type="button" @click="form.emotion = 'Urgencia'" :class="form.emotion === 'Urgencia' ? 'bg-red-100 border-red-500 text-red-700' : 'bg-white border-slate-200 text-slate-500'" class="border rounded-lg py-2 px-3 text-sm font-medium transition hover:bg-red-50">Urgencia 🚑</button>
+                                    <button type="button" @click="form.emotion = 'Ocio'" :class="form.emotion === 'Ocio' ? 'bg-purple-100 border-purple-500 text-purple-700' : 'bg-white border-slate-200 text-slate-500'" class="border rounded-lg py-2 px-3 text-sm font-medium transition hover:bg-purple-50">Ocio 🎉</button>
+                                    <button type="button" @click="form.emotion = 'Social'" :class="form.emotion === 'Social' ? 'bg-blue-100 border-blue-500 text-blue-700' : 'bg-white border-slate-200 text-slate-500'" class="border rounded-lg py-2 px-3 text-sm font-medium transition hover:bg-blue-50">Social 🥂</button>
+                                    <button type="button" @click="form.emotion = 'Aburrimiento'" :class="form.emotion === 'Aburrimiento' ? 'bg-gray-100 border-gray-500 text-gray-700' : 'bg-white border-slate-200 text-slate-500'" class="border rounded-lg py-2 px-3 text-sm font-medium transition hover:bg-gray-50">Aburrido 😑</button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Método de Pago</label>
-                            <select x-model="form.paymentMethod" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-white">
-                                <option value="" disabled selected>Seleccionar...</option>
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-                                <option value="Tarjeta de Débito">Tarjeta de Débito</option>
-                                <option value="Transferencia">Transferencia</option>
-                                <option value="Cheque">Cheque</option>
-                            </select>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 px-4 rounded-lg transition shadow-md flex justify-center items-center gap-2">
-                                <i class="fa-solid fa-save"></i>
-                                <span x-text="isEditing ? 'Actualizar' : 'Guardar'"></span>
-                            </button>
-                            
-                            <button type="button" x-show="isEditing" @click="resetForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2.5 px-4 rounded-lg transition">
-                                Cancelar
-                            </button>
-                        </div>
+                        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-500/30 transition transform hover:scale-[1.02]">
+                            Registrar Gasto
+                        </button>
                     </form>
                 </div>
             </div>
+        </div>
+        
+        <div x-show="view === 'settings'" x-cloak>
+            <div class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-sm">
+                <h2 class="text-2xl font-bold mb-6">Configuración</h2>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Presupuesto Mensual Objetivo ($)</label>
+                    <input type="number" x-model.number="budget" @change="saveSettings" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3">
+                    <p class="text-xs text-slate-400 mt-1">Esto define los colores de tus alertas.</p>
+                </div>
 
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
-                    
-                    <div class="p-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <h2 class="font-bold text-gray-700">Listado de Insumos</h2>
-                        <div class="relative w-full sm:w-64">
-                            <input type="text" x-model="search" placeholder="Buscar producto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm">
-                            <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400"></i>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cant.</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pago</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <template x-for="item in filteredItems" :key="item.id">
-                                    <tr class="hover:bg-gray-50 transition duration-150">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900" x-text="item.name"></div>
-                                            <div class="text-xs text-gray-400" x-text="new Date(item.date).toLocaleDateString()"></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800" x-text="item.quantity"></span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
-                                            <div x-text="formatCurrency(item.price)"></div>
-                                            <div class="text-xs text-gray-400">Total: <span x-text="formatCurrency(item.price * item.quantity)"></span></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            <span x-text="item.paymentMethod"></span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button @click="editItem(item)" class="text-brand-600 hover:text-brand-900 mr-3 tooltip" title="Editar">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </button>
-                                            <button @click="deleteItem(item.id)" class="text-red-600 hover:text-red-900 tooltip" title="Eliminar">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </template>
-                                <tr x-show="filteredItems.length === 0">
-                                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">
-                                        <i class="fa-solid fa-inbox fa-3x mb-3 text-gray-300"></i>
-                                        <p>No se encontraron productos.</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="p-4 bg-red-50 rounded-lg border border-red-100">
+                    <h4 class="font-bold text-red-800 mb-2">Zona de Peligro</h4>
+                    <button @click="wipeData()" class="text-sm bg-white border border-red-200 text-red-600 px-4 py-2 rounded shadow-sm hover:bg-red-600 hover:text-white transition">
+                        Borrar todos los datos y reiniciar
+                    </button>
                 </div>
             </div>
         </div>
-
-        <footer class="mt-12 text-center text-gray-400 text-sm pb-8">
-            <p>&copy; <span x-text="new Date().getFullYear()"></span> Sistema de Gestión de Inventario. Todos los datos se guardan en tu navegador.</p>
-        </footer>
 
     </main>
 
     <script>
-        function inventoryApp() {
+        function financeApp() {
             return {
-                inventory: [],
-                search: '',
-                isEditing: false,
-                form: {
-                    id: null,
-                    name: '',
-                    quantity: '',
-                    price: '',
-                    paymentMethod: ''
+                view: 'dashboard',
+                items: [],
+                budget: 100000, // Valor default
+                form: { name: '', price: '', vendor: '', category: 'Comida', paymentMethod: 'Efectivo', emotion: 'Necesario' },
+                
+                // Charts Instances
+                charts: {},
+
+                // Computed Logic Helpers
+                get sortedItems() {
+                    return this.items.sort((a, b) => new Date(b.date) - new Date(a.date));
+                },
+                get currentSpent() {
+                    const now = new Date();
+                    return this.items
+                        .filter(i => new Date(i.date).getMonth() === now.getMonth() && new Date(i.date).getFullYear() === now.getFullYear())
+                        .reduce((sum, item) => sum + item.price, 0);
+                },
+                get daysLeft() {
+                    const now = new Date();
+                    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    return lastDay.getDate() - now.getDate();
+                },
+                get comparisonText() {
+                    return this.percentageDiff > 0 ? `+${this.percentageDiff}% mal` : `${this.percentageDiff}% mejor`;
+                },
+                get isSpendingMore() {
+                    return this.percentageDiff > 0;
+                },
+                get percentageDiff() {
+                    const now = new Date();
+                    const currentMonthTotal = this.currentSpent;
+                    
+                    const prevMonthItems = this.items.filter(i => {
+                        const d = new Date(i.date);
+                        return d.getMonth() === (now.getMonth() - 1 < 0 ? 11 : now.getMonth() - 1);
+                    });
+                    const prevTotal = prevMonthItems.reduce((sum, i) => sum + i.price, 0);
+                    
+                    if(prevTotal === 0) return 0;
+                    return Math.round(((currentMonthTotal - prevTotal) / prevTotal) * 100);
+                },
+                get budgetMessage() {
+                    const ratio = this.currentSpent / this.budget;
+                    if(ratio < 0.5) return "Vas excelente. Paz interior.";
+                    if(ratio < 0.85) return "Cuidado, entrando en zona amarilla.";
+                    if(ratio < 1) return "Freno de mano urgente.";
+                    return "Estás viviendo con plata prestada.";
+                },
+                get emotionalDiagnosis() {
+                    const emotions = {};
+                    this.items.forEach(i => emotions[i.emotion] = (emotions[i.emotion] || 0) + i.price);
+                    const total = Object.values(emotions).reduce((a,b)=>a+b, 0);
+                    
+                    const antojo = emotions['Antojo'] || 0;
+                    const ocio = emotions['Ocio'] || 0;
+                    
+                    const wastedPercent = Math.round(((antojo + ocio) / total) * 100);
+                    if(isNaN(wastedPercent)) return "Sin datos suficientes.";
+                    if(wastedPercent > 40) return `El ${wastedPercent}% de tu dinero se va en deseos, no necesidades.`;
+                    return `Gasto emocional controlado (${wastedPercent}%). Bien hecho.`;
                 },
 
-                initData() {
-                    // Cargar desde LocalStorage al iniciar
-                    const storedData = localStorage.getItem('myInventoryDB');
-                    if (storedData) {
-                        this.inventory = JSON.parse(storedData);
-                    }
-                },
+                // Core Functions
+                initApp() {
+                    const stored = localStorage.getItem('mazzaERP_db');
+                    const storedBudget = localStorage.getItem('mazzaERP_budget');
+                    
+                    if (stored) this.items = JSON.parse(stored);
+                    if (storedBudget) this.budget = parseFloat(storedBudget);
 
-                get filteredItems() {
-                    if (this.search === '') {
-                        // Ordenar por fecha de creación (más nuevo primero)
-                        return this.inventory.sort((a, b) => new Date(b.date) - new Date(a.date));
-                    }
-                    return this.inventory.filter(item => {
-                        return item.name.toLowerCase().includes(this.search.toLowerCase()) ||
-                               item.paymentMethod.toLowerCase().includes(this.search.toLowerCase());
+                    // Render Charts after DOM load
+                    this.$nextTick(() => {
+                        this.renderCharts();
                     });
                 },
 
-                calculateTotalValue() {
-                    return this.inventory.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-                },
-
-                formatCurrency(value) {
-                    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
-                },
-
                 saveItem() {
-                    if(this.isEditing) {
-                        // Actualizar
-                        const index = this.inventory.findIndex(i => i.id === this.form.id);
-                        if (index !== -1) {
-                            this.inventory[index] = {
-                                ...this.form,
-                                date: this.inventory[index].date // Mantener fecha original o actualizarla si prefieres
-                            };
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Actualizado',
-                                text: 'El producto ha sido modificado correctamente.',
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-                        }
-                    } else {
-                        // Crear Nuevo
-                        const newItem = {
-                            id: Date.now(), // ID único basado en timestamp
-                            name: this.form.name,
-                            quantity: this.form.quantity,
-                            price: this.form.price,
-                            paymentMethod: this.form.paymentMethod,
-                            date: new Date().toISOString()
-                        };
-                        this.inventory.push(newItem);
-                        
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true
-                        });
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Producto agregado'
-                        });
-                    }
+                    const newItem = {
+                        id: Date.now(),
+                        ...this.form,
+                        date: new Date().toISOString()
+                    };
+                    this.items.push(newItem);
+                    this.saveToLS();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registrado',
+                        text: 'Datos actualizados e inteligencia recalculada.',
+                        timer: 1500, showConfirmButton: false
+                    });
 
-                    this.saveToLocalStorage();
-                    this.resetForm();
-                },
-
-                editItem(item) {
-                    this.isEditing = true;
-                    // Clonar objeto para no editar directamente en la tabla hasta guardar
-                    this.form = { ...item };
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    this.form = { name: '', price: '', vendor: '', category: 'Comida', paymentMethod: 'Efectivo', emotion: 'Necesario' };
+                    this.view = 'dashboard';
+                    this.updateCharts();
                 },
 
                 deleteItem(id) {
                     Swal.fire({
-                        title: '¿Estás seguro?',
-                        text: "No podrás revertir esto.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
+                        title: '¿Borrar registro?', text: "Esto afectará tus estadísticas.",
+                        icon: 'warning', showCancelButton: true, confirmButtonText: 'Sí, borrar', cancelButtonText: 'Cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            this.inventory = this.inventory.filter(item => item.id !== id);
-                            this.saveToLocalStorage();
-                            Swal.fire(
-                                'Eliminado!',
-                                'El producto ha sido eliminado.',
-                                'success'
-                            )
+                            this.items = this.items.filter(i => i.id !== id);
+                            this.saveToLS();
+                            this.updateCharts();
                         }
                     })
                 },
 
-                resetForm() {
-                    this.isEditing = false;
-                    this.form = {
-                        id: null,
-                        name: '',
-                        quantity: '',
-                        price: '',
-                        paymentMethod: ''
-                    };
+                calculatePrediction() {
+                    const now = new Date();
+                    const day = now.getDate();
+                    const totalDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+                    
+                    if (this.currentSpent === 0) return 0;
+                    const dailyAvg = this.currentSpent / day;
+                    return dailyAvg * totalDays;
                 },
 
-                saveToLocalStorage() {
-                    localStorage.setItem('myInventoryDB', JSON.stringify(this.inventory));
+                saveSettings() {
+                    localStorage.setItem('mazzaERP_budget', this.budget);
+                    Swal.fire('Guardado', 'Presupuesto actualizado', 'success');
                 },
 
-                exportToCSV() {
-                    if(this.inventory.length === 0) {
-                        Swal.fire('Error', 'No hay datos para exportar', 'error');
-                        return;
-                    }
+                saveToLS() {
+                    localStorage.setItem('mazzaERP_db', JSON.stringify(this.items));
+                },
 
-                    let csvContent = "data:text/csv;charset=utf-8,";
-                    csvContent += "ID,Nombre,Cantidad,Precio Unitario,Total,Metodo Pago,Fecha\n";
+                wipeData() {
+                    Swal.fire({
+                        title: '¿RESET TOTAL?', text: "Se perderá todo el historial.", icon: 'error',
+                        showCancelButton: true, confirmButtonText: 'BORRAR TODO', confirmButtonColor: '#ef4444'
+                    }).then((r) => {
+                        if(r.isConfirmed) {
+                            localStorage.removeItem('mazzaERP_db');
+                            this.items = [];
+                            this.updateCharts();
+                            Swal.fire('Sistema Reiniciado', '', 'success');
+                        }
+                    });
+                },
 
-                    this.inventory.forEach(item => {
-                        const row = [
-                            item.id,
-                            `"${item.name}"`, // Comillas para evitar errores con comas en nombres
-                            item.quantity,
-                            item.price,
-                            (item.price * item.quantity),
-                            item.paymentMethod,
-                            new Date(item.date).toLocaleDateString()
-                        ].join(",");
-                        csvContent += row + "\n";
+                // UI Helpers
+                formatMoney(val) {
+                    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(val);
+                },
+                formatDate(dateStr) {
+                    const d = new Date(dateStr);
+                    return `${d.getDate()}/${d.getMonth()+1} - ${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')}`;
+                },
+                getCategoryIcon(cat) {
+                    const icons = { 'Comida': 'fa-burger', 'Transporte': 'fa-car', 'Servicios': 'fa-bolt', 'Ropa': 'fa-shirt', 'Ocio': 'fa-gamepad', 'Salud': 'fa-heart-pulse', 'Hogar': 'fa-house', 'Educación': 'fa-graduation-cap' };
+                    return icons[cat] || 'fa-box';
+                },
+
+                // CHARTS ENGINE
+                renderCharts() {
+                    // Config común
+                    Chart.defaults.font.family = 'Inter';
+                    Chart.defaults.color = '#64748b';
+
+                    // 1. Radar Chart (Categorias)
+                    const radarCtx = document.getElementById('radarChart');
+                    this.charts.radar = new Chart(radarCtx, {
+                        type: 'radar',
+                        data: this.getRadarData(),
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                r: {
+                                    angleLines: { color: '#e2e8f0' },
+                                    grid: { color: '#e2e8f0' },
+                                    pointLabels: { font: { size: 11, weight: 'bold' } }
+                                }
+                            }
+                        }
                     });
 
-                    const encodedUri = encodeURI(csvContent);
-                    const link = document.createElement("a");
-                    link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "inventario_compras.csv");
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    // 2. Pie Chart (Emociones)
+                    const emoCtx = document.getElementById('emotionChart');
+                    this.charts.emotion = new Chart(emoCtx, {
+                        type: 'doughnut',
+                        data: this.getEmotionData(),
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '70%',
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+
+                    // 3. Bar Chart (Vendors)
+                    const venCtx = document.getElementById('vendorChart');
+                    this.charts.vendor = new Chart(venCtx, {
+                        type: 'bar',
+                        data: this.getVendorData(),
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            indexAxis: 'y',
+                            plugins: { legend: { display: false } },
+                            scales: { x: { grid: { display: false } }, y: { grid: { display: false } } }
+                        }
+                    });
+                },
+
+                updateCharts() {
+                    if(this.charts.radar) {
+                        this.charts.radar.data = this.getRadarData();
+                        this.charts.radar.update();
+                    }
+                    if(this.charts.emotion) {
+                        this.charts.emotion.data = this.getEmotionData();
+                        this.charts.emotion.update();
+                    }
+                    if(this.charts.vendor) {
+                        this.charts.vendor.data = this.getVendorData();
+                        this.charts.vendor.update();
+                    }
+                },
+
+                // Data Processors for Charts
+                getRadarData() {
+                    const categories = ['Comida', 'Transporte', 'Ocio', 'Ropa', 'Servicios', 'Hogar'];
+                    const data = categories.map(cat => {
+                        return this.items.filter(i => i.category === cat).reduce((sum, i) => sum + i.price, 0);
+                    });
+                    return {
+                        labels: categories,
+                        datasets: [{
+                            label: 'Gasto',
+                            data: data,
+                            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                            borderColor: '#6366f1',
+                            pointBackgroundColor: '#4f46e5',
+                            borderWidth: 2
+                        }]
+                    };
+                },
+                getEmotionData() {
+                    const emotions = ['Necesario', 'Antojo', 'Urgencia', 'Ocio'];
+                    const data = emotions.map(e => this.items.filter(i => i.emotion === e).reduce((sum, i) => sum + i.price, 0));
+                    return {
+                        labels: emotions,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: ['#10b981', '#ec4899', '#ef4444', '#a855f7'],
+                            borderWidth: 0
+                        }]
+                    };
+                },
+                getVendorData() {
+                    const vendors = {};
+                    this.items.forEach(i => vendors[i.vendor] = (vendors[i.vendor] || 0) + i.price);
+                    // Top 5
+                    const sorted = Object.entries(vendors).sort((a,b) => b[1] - a[1]).slice(0, 5);
+                    return {
+                        labels: sorted.map(i => i[0]),
+                        datasets: [{
+                            data: sorted.map(i => i[1]),
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 4
+                        }]
+                    };
                 }
             }
         }
