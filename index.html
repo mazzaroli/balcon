@@ -3,230 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infografía: El ROI de los Balcones en Viviendas Universitarias</title>
-    <!-- Chosen Palette: Vibrant Growth -->
-    <!-- Application Narrative & Structure Plan: The infographic follows a narrative structure to guide the user. It starts with a high-impact "Hook" (Section 1) presenting the core finding. Section 2, "The Financial Breakdown," provides the main evidence with comparative charts for key metrics (Price, Yield, Speed). Section 3, "Global Context," broadens the perspective showing the trend's international relevance. Finally, Section 4, "Strategic Takeaways," offers actionable conclusions. This logical flow (What -> Why -> Where -> Now What) makes the complex data digestible and tells a coherent story. -->
-    <!-- Visualization & Content Choices: Data: Price/Yield/Speed Comparison -> Goal: Compare -> Viz: Horizontal Bar Chart (Chart.js/Canvas) -> Justification: Offers a clear, direct visual comparison between 'With Balcony' and 'Without Balcony' scenarios. || Data: Global Market Importance -> Goal: Rank/Compare -> Viz: Ordered Bar Chart (Chart.js/Canvas) -> Justification: Effectively ranks the strategic value across different countries. || Data: Headline Stat (Value Shift) -> Goal: Inform -> Viz: Large Number Stat Card (HTML/Tailwind) -> Justification: High-impact method to convey a single crucial data point immediately. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Gestor de Inventario Pro</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #fefcfb;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 700px;
-            height: 300px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 400px;
-            }
-        }
-    </style>
-</head>
-<body class="text-slate-800">
-
-    <header class="bg-[#073B4C] text-white text-center py-16 px-4">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">El Balcón: El Factor X del ROI Inmobiliario</h1>
-            <p class="mt-4 text-xl md:text-2xl text-slate-300">Un análisis visual sobre por qué el espacio exterior es la inversión más rentable en la vivienda estudiantil moderna.</p>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-4 py-16">
-
-        <section class="mb-20">
-            <div class="text-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-[#073B4C] mb-4">Un Cambio de Valor Impulsado por la Pandemia</h2>
-                <p class="text-lg md:text-xl text-slate-600 mb-12 max-w-3xl mx-auto">La búsqueda de bienestar transformó el balcón de un simple extra a un activo financiero de primer nivel. Este espacio ahora representa una parte crucial del valor total de una propiedad, especialmente en zonas universitarias densas.</p>
-            </div>
-            <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-2xl border border-slate-200 text-center">
-                <p class="text-base font-semibold text-[#118AB2]">Valor del m² de Balcón (vs. m² Interior)</p>
-                <p class="text-6xl md:text-8xl font-extrabold text-[#06D6A0] my-4">100%</p>
-                <p class="text-slate-600">En mercados clave como Buenos Aires, el valor de un metro cuadrado de balcón ha llegado a equipararse al de un metro cuadrado interior, un aumento drástico desde el 30-50% pre-pandemia.</p>
-            </div>
-        </section>
-
-        <section class="mb-20 bg-slate-50 py-16 rounded-2xl">
-            <div class="text-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-[#073B4C] mb-4">El desglose financiero: Con vs. Sin Balcón</h2>
-                <p class="text-lg md:text-xl text-slate-600 mb-12 max-w-3xl mx-auto">La inclusión de un balcón no solo embellece una propiedad; impacta directamente en las métricas de rendimiento más importantes para un inversor. Los datos muestran una clara ventaja en cada etapa del ciclo de inversión.</p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
-                    <h3 class="font-bold text-xl text-[#118AB2]">Prima de Venta</h3>
-                    <p class="text-3xl font-bold text-[#FF6B6B] my-2">+ 5.000€</p>
-                    <p class="text-sm text-slate-500">Es el incremento mínimo documentado en el precio de venta en mercados como Finlandia, demostrando un aumento tangible del valor del activo.</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
-                    <h3 class="font-bold text-xl text-[#118AB2]">Rendimiento por Alquiler</h3>
-                    <p class="text-3xl font-bold text-[#FFD166] my-2">+3% a 5%</p>
-                    <p class="text-sm text-slate-500">Permite fijar alquileres más altos al satisfacer una demanda premium, lo que se traduce en mayores ingresos anuales y un mejor flujo de caja.</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 md:col-span-2 lg:col-span-1">
-                    <h3 class="font-bold text-xl text-[#118AB2]">Velocidad de Venta</h3>
-                    <p class="text-3xl font-bold text-[#06D6A0] my-2">Más Rápida</p>
-                    <p class="text-sm text-slate-500">La mayor deseabilidad del inmueble reduce significativamente el tiempo en el mercado, minimizando costos y acelerando el retorno de la inversión.</p>
-                </div>
-            </div>
-        </section>
-        
-        <section class="mb-20">
-            <div class="text-center">
-                 <h2 class="text-3xl md:text-4xl font-extrabold text-[#073B4C] mb-4">Contexto Global: El Rol Estratégico del Balcón</h2>
-                 <p class="text-lg md:text-xl text-slate-600 mb-12 max-w-3xl mx-auto">Aunque la tendencia es global, la importancia de un balcón varía según la madurez de cada mercado de vivienda estudiantil. Este gráfico compara su valor estratégico en diferentes países europeos, desde un lujo emergente hasta una necesidad competitiva.</p>
-            </div>
-             <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
-                <div class="chart-container">
-                    <canvas id="globalMarketChart"></canvas>
-                </div>
-            </div>
-        </section>
-        
-        <section class="bg-[#073B4C] text-white py-16 rounded-2xl">
-            <div class="text-center px-4">
-                 <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Conclusiones y Recomendaciones Estratégicas</h2>
-                 <p class="text-lg md:text-xl text-slate-300 mb-12 max-w-3xl mx-auto">Para maximizar el ROI, los actores del mercado deben reconocer el balcón como un componente de inversión esencial y no como un costo adicional.</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
-                 <div class="bg-[#118AB2] p-6 rounded-lg text-center">
-                     <h3 class="font-bold text-xl">Para Promotores</h3>
-                     <p class="mt-2 text-slate-200">Diseñar con visión de futuro: Incluir balcones de forma estándar para evitar la obsolescencia del activo y asegurar su competitividad a largo plazo.</p>
-                 </div>
-                 <div class="bg-[#118AB2] p-6 rounded-lg text-center">
-                     <h3 class="font-bold text-xl">Para Marketing</h3>
-                     <p class="mt-2 text-slate-200">Vender el beneficio, no la característica. Comunicar el balcón como un espacio de bienestar, productividad y socialización para justificar precios premium.</p>
-                 </div>
-                 <div class="bg-[#118AB2] p-6 rounded-lg text-center">
-                     <h3 class="font-bold text-xl">Para Inversores</h3>
-                     <p class="mt-2 text-slate-200">Actualizar los modelos de valoración: Incorporar una "prima por balcón" y un "descuento por ausencia" para reflejar la realidad del mercado actual.</p>
-                 </div>
-             </div>
-        </section>
-    </main>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <footer class="bg-slate-800 text-slate-400 text-center py-10 mt-16">
-        <div class="max-w-4xl mx-auto px-4">
-            <h4 class="font-bold text-lg text-white mb-4">Fuentes y Metodología</h4>
-            <p class="text-sm">Esta infografía sintetiza datos y análisis de las siguientes fuentes:</p>
-            <ul class="mt-4 text-xs space-y-1">
-                <li>Análisis comparativos de mercado post-pandemia en Buenos Aires, Argentina.</li>
-                <li>Datos de mercado directo y foros inmobiliarios en Tampere, Finlandia.</li>
-                <li>Informes del sector PBSA (Purpose-Built Student Accommodation) de Knight Frank, Savills y JLL.</li>
-                <li>Aplicación de principios del Modelo de Precios Hedónicos.</li>
-            </ul>
-        </div>
-    </footer>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const wrapLabel = (label) => {
-                if (typeof label === 'string' && label.length > 16) {
-                    const words = label.split(' ');
-                    const lines = [];
-                    let currentLine = '';
-                    words.forEach(word => {
-                        if ((currentLine + word).length > 16) {
-                            lines.push(currentLine.trim());
-                            currentLine = '';
-                        }
-                        currentLine += word + ' ';
-                    });
-                    lines.push(currentLine.trim());
-                    return lines;
-                }
-                return label;
-            };
-
-            const tooltipTitleCallback = (tooltipItems) => {
-                const item = tooltipItems[0];
-                let label = item.chart.data.labels[item.dataIndex];
-                if (Array.isArray(label)) {
-                    return label.join(' ');
-                }
-                return label;
-            };
-            
-            const globalMarketCtx = document.getElementById('globalMarketChart').getContext('2d');
-            new Chart(globalMarketCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Hungría', 'España', 'Portugal', 'Reino Unido'].map(wrapLabel),
-                    datasets: [{
-                        label: 'Importancia Estratégica (%)',
-                        data: [55, 70, 80, 95],
-                        backgroundColor: [
-                            '#FFD166',
-                            '#06D6A0',
-                            '#118AB2',
-                            '#FF6B6B'
-                        ],
-                        borderColor: '#ffffff',
-                        borderWidth: 2,
-                        borderRadius: 5,
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: tooltipTitleCallback,
-                                label: function(context) {
-                                    let value = context.parsed.x;
-                                    let label = context.chart.data.labels[context.dataIndex];
-                                    if(Array.isArray(label)) label = label.join(' ');
-                                    
-                                    if(label === 'Reino Unido') return ` ${value}%: Necesidad Competitiva`;
-                                    if(label === 'Portugal') return ` ${value}%: Característica Estándar`;
-                                    if(label === 'España') return ` ${value}%: Diferenciador Clave`;
-                                    if(label === 'Hungría') return ` ${value}%: Activo Premium`;
-                                    return ` ${value}%`;
-                                }
-                            }
-                        }
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            max: 100,
-                            title: {
-                                display: true,
-                                text: 'Nivel de Importancia en el Mercado',
-                                font: { size: 14, weight: 'bold' },
-                                color: '#475569'
-                            },
-                            grid: {
-                                color: '#e2e8f0'
-                            }
-                        },
-                        y: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: { size: 14, weight: '600' },
-                                color: '#073B4C'
-                            }
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
                         }
                     }
                 }
-            });
-        });
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        [x-cloak] { display: none !important; }
+        body { background-color: #f3f4f6; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased" x-data="inventoryApp()" x-init="initData()">
+
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="bg-brand-600 text-white p-2 rounded-lg shadow-lg">
+                        <i class="fa-solid fa-boxes-stacked fa-lg"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-gray-900">Inventario<span class="text-brand-600">Pro</span></span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="https://github.com" target="_blank" class="text-gray-500 hover:text-gray-900 transition">
+                        <i class="fa-brands fa-github fa-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-500 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500 uppercase">Items Totales</p>
+                    <p class="text-3xl font-bold text-gray-900" x-text="inventory.length"></p>
+                </div>
+                <div class="bg-brand-50 p-3 rounded-full text-brand-600">
+                    <i class="fa-solid fa-list-ol fa-xl"></i>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-emerald-500 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500 uppercase">Valor Total</p>
+                    <p class="text-3xl font-bold text-gray-900" x-text="formatCurrency(calculateTotalValue())"></p>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-full text-emerald-600">
+                    <i class="fa-solid fa-sack-dollar fa-xl"></i>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-brand-600 to-brand-700 rounded-xl shadow-sm p-6 text-white flex flex-col justify-center items-start gap-2">
+                <h3 class="font-bold text-lg">Acciones</h3>
+                <button @click="exportToCSV()" class="text-sm bg-white/20 hover:bg-white/30 transition px-4 py-2 rounded-lg flex items-center gap-2 w-full justify-center">
+                    <i class="fa-solid fa-file-csv"></i> Exportar CSV
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-24">
+                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-brand-600"></i>
+                        <span x-text="isEditing ? 'Editar Producto' : 'Nuevo Producto'"></span>
+                    </h2>
+                    
+                    <form @submit.prevent="saveItem">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Producto</label>
+                            <input type="text" x-model="form.name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="Ej: Laptop Dell">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cantidad</label>
+                                <input type="number" x-model.number="form.quantity" min="1" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="0">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Precio Unitario</label>
+                                <input type="number" step="0.01" x-model.number="form.price" min="0" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Método de Pago</label>
+                            <select x-model="form.paymentMethod" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-white">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                                <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                                <option value="Transferencia">Transferencia</option>
+                                <option value="Cheque">Cheque</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 px-4 rounded-lg transition shadow-md flex justify-center items-center gap-2">
+                                <i class="fa-solid fa-save"></i>
+                                <span x-text="isEditing ? 'Actualizar' : 'Guardar'"></span>
+                            </button>
+                            
+                            <button type="button" x-show="isEditing" @click="resetForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2.5 px-4 rounded-lg transition">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
+                    
+                    <div class="p-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <h2 class="font-bold text-gray-700">Listado de Insumos</h2>
+                        <div class="relative w-full sm:w-64">
+                            <input type="text" x-model="search" placeholder="Buscar producto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm">
+                            <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cant.</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pago</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <template x-for="item in filteredItems" :key="item.id">
+                                    <tr class="hover:bg-gray-50 transition duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900" x-text="item.name"></div>
+                                            <div class="text-xs text-gray-400" x-text="new Date(item.date).toLocaleDateString()"></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800" x-text="item.quantity"></span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                                            <div x-text="formatCurrency(item.price)"></div>
+                                            <div class="text-xs text-gray-400">Total: <span x-text="formatCurrency(item.price * item.quantity)"></span></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span x-text="item.paymentMethod"></span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button @click="editItem(item)" class="text-brand-600 hover:text-brand-900 mr-3 tooltip" title="Editar">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            <button @click="deleteItem(item.id)" class="text-red-600 hover:text-red-900 tooltip" title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <tr x-show="filteredItems.length === 0">
+                                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                                        <i class="fa-solid fa-inbox fa-3x mb-3 text-gray-300"></i>
+                                        <p>No se encontraron productos.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-400 text-sm pb-8">
+            <p>&copy; <span x-text="new Date().getFullYear()"></span> Sistema de Gestión de Inventario. Todos los datos se guardan en tu navegador.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        function inventoryApp() {
+            return {
+                inventory: [],
+                search: '',
+                isEditing: false,
+                form: {
+                    id: null,
+                    name: '',
+                    quantity: '',
+                    price: '',
+                    paymentMethod: ''
+                },
+
+                initData() {
+                    // Cargar desde LocalStorage al iniciar
+                    const storedData = localStorage.getItem('myInventoryDB');
+                    if (storedData) {
+                        this.inventory = JSON.parse(storedData);
+                    }
+                },
+
+                get filteredItems() {
+                    if (this.search === '') {
+                        // Ordenar por fecha de creación (más nuevo primero)
+                        return this.inventory.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    }
+                    return this.inventory.filter(item => {
+                        return item.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                               item.paymentMethod.toLowerCase().includes(this.search.toLowerCase());
+                    });
+                },
+
+                calculateTotalValue() {
+                    return this.inventory.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+                },
+
+                formatCurrency(value) {
+                    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+                },
+
+                saveItem() {
+                    if(this.isEditing) {
+                        // Actualizar
+                        const index = this.inventory.findIndex(i => i.id === this.form.id);
+                        if (index !== -1) {
+                            this.inventory[index] = {
+                                ...this.form,
+                                date: this.inventory[index].date // Mantener fecha original o actualizarla si prefieres
+                            };
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Actualizado',
+                                text: 'El producto ha sido modificado correctamente.',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        }
+                    } else {
+                        // Crear Nuevo
+                        const newItem = {
+                            id: Date.now(), // ID único basado en timestamp
+                            name: this.form.name,
+                            quantity: this.form.quantity,
+                            price: this.form.price,
+                            paymentMethod: this.form.paymentMethod,
+                            date: new Date().toISOString()
+                        };
+                        this.inventory.push(newItem);
+                        
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Producto agregado'
+                        });
+                    }
+
+                    this.saveToLocalStorage();
+                    this.resetForm();
+                },
+
+                editItem(item) {
+                    this.isEditing = true;
+                    // Clonar objeto para no editar directamente en la tabla hasta guardar
+                    this.form = { ...item };
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
+                deleteItem(id) {
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "No podrás revertir esto.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.inventory = this.inventory.filter(item => item.id !== id);
+                            this.saveToLocalStorage();
+                            Swal.fire(
+                                'Eliminado!',
+                                'El producto ha sido eliminado.',
+                                'success'
+                            )
+                        }
+                    })
+                },
+
+                resetForm() {
+                    this.isEditing = false;
+                    this.form = {
+                        id: null,
+                        name: '',
+                        quantity: '',
+                        price: '',
+                        paymentMethod: ''
+                    };
+                },
+
+                saveToLocalStorage() {
+                    localStorage.setItem('myInventoryDB', JSON.stringify(this.inventory));
+                },
+
+                exportToCSV() {
+                    if(this.inventory.length === 0) {
+                        Swal.fire('Error', 'No hay datos para exportar', 'error');
+                        return;
+                    }
+
+                    let csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "ID,Nombre,Cantidad,Precio Unitario,Total,Metodo Pago,Fecha\n";
+
+                    this.inventory.forEach(item => {
+                        const row = [
+                            item.id,
+                            `"${item.name}"`, // Comillas para evitar errores con comas en nombres
+                            item.quantity,
+                            item.price,
+                            (item.price * item.quantity),
+                            item.paymentMethod,
+                            new Date(item.date).toLocaleDateString()
+                        ].join(",");
+                        csvContent += row + "\n";
+                    });
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "inventario_compras.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+        }
     </script>
 </body>
 </html>
