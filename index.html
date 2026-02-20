@@ -3,1437 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrackFit - Seguimiento Deportivo para Clientes</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Inversión con aportes · App moderna</title>
+    <!-- Chart.js para gráfica interactiva -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Fuente moderna e íconos (opcional) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --success-color: #27ae60;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
-        }
-        
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 20px 0;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .app-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-        }
-        
-        @media (max-width: 992px) {
-            .app-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .section-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-        
-        .section-title {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--light-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #f6f9fc 0%, #e9f1f8 100%);
+            min-height: 100vh;
             display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-title i {
-            color: var(--secondary-color);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-        
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .btn {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background-color 0.3s;
-            display: inline-flex;
-            align-items: center;
             justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .btn-success {
-            background-color: var(--success-color);
-        }
-        
-        .btn-success:hover {
-            background-color: #219653;
-        }
-        
-        .btn-danger {
-            background-color: var(--accent-color);
-        }
-        
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-        
-        .btn-block {
-            width: 100%;
-        }
-        
-        .activity-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .activity-item {
-            background-color: var(--light-color);
-            padding: 15px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .activity-item:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-        
-        .activity-item.selected {
-            border-color: var(--secondary-color);
-            background-color: #e3f2fd;
-        }
-        
-        .activity-item h4 {
-            color: var(--primary-color);
-            margin-bottom: 8px;
-        }
-        
-        .activity-item p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .clients-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .client-item {
-            background-color: white;
-            border-left: 4px solid var(--secondary-color);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-        
-        .client-item:hover {
-            transform: translateX(5px);
-        }
-        
-        .client-item.selected {
-            background-color: #e3f2fd;
-            border-left-color: var(--accent-color);
-        }
-        
-        .client-header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            padding: 1.5rem;
+            margin: 0;
         }
-        
-        .client-name {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary-color);
+
+        .card {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 20, 40, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);
+            padding: 2.5rem;
+            border: 1px solid rgba(255,255,255,0.5);
         }
-        
-        .client-objective {
-            display: inline-block;
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-top: 5px;
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #0b2b3f, #1b4a6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.35rem;
         }
-        
-        .client-details {
+
+        .subtitle {
+            color: #2c4556;
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            background: rgba(59,130,246,0.04);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .grid-form {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 0.9rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.8rem 1.5rem;
+            margin-bottom: 2.2rem;
         }
-        
-        .client-detail-item {
+
+        .input-group {
             display: flex;
             flex-direction: column;
+            gap: 0.5rem;
         }
-        
-        .detail-label {
-            font-weight: 600;
-            color: #666;
-            font-size: 0.8rem;
-        }
-        
-        .detail-value {
-            color: var(--primary-color);
-        }
-        
-        .calories-result {
-            background: linear-gradient(to right, #27ae60, #2ecc71);
-            color: white;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .calories-result h3 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-        
-        .calories-result p {
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        
-        .calories-breakdown {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .calories-breakdown-item {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: var(--border-radius);
-        }
-        
-        .calories-breakdown-item h4 {
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
-        
-        .calories-breakdown-item p {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-        
-        .tab-container {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .tab {
-            padding: 12px 25px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            color: var(--secondary-color);
-            border-bottom: 3px solid var(--secondary-color);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .activity-log {
-            margin-top: 20px;
-        }
-        
-        .activity-log-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            background-color: var(--light-color);
-            border-radius: var(--border-radius);
-            margin-bottom: 10px;
-        }
-        
-        .activity-log-date {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .activity-log-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #777;
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
-        
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--success-color);
-            color: white;
-            padding: 15px 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.5s;
-            z-index: 1000;
-        }
-        
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            color: #777;
+
+        .input-group label {
+            font-weight: 500;
             font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #1e3a5f;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-group label span {
+            background: #dbeafe;
+            border-radius: 30px;
+            padding: 2px 10px;
+            font-size: 0.7rem;
+            color: #1e4a7a;
+        }
+
+        .input-field {
+            background: white;
+            border: 1.5px solid #dce9f2;
+            border-radius: 24px;
+            padding: 0.9rem 1.4rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #0b2b3f;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0,20,40,0.02);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 8px 18px -8px rgba(59,130,246,0.3);
+        }
+
+        .input-field::placeholder {
+            color: #9bb7d4;
+            font-weight: 300;
+            font-size: 0.95rem;
+        }
+
+        .button {
+            background: #1b3b5c;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 1rem 2.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 10px 20px -5px rgba(20, 70, 120, 0.4);
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: fit-content;
+            margin-bottom: 2.2rem;
+        }
+
+        .button:hover {
+            background: #1f4a72;
+            transform: scale(1.02);
+            box-shadow: 0 16px 28px -8px #1e4a7a;
+        }
+
+        .results-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.6rem 2rem;
+            flex: 1 1 200px;
+            box-shadow: 0 6px 14px rgba(0,20,40,0.04);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .metric .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #4d6a86;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b2b3f;
+            line-height: 1.2;
+        }
+
+        .metric .sub {
+            font-size: 0.9rem;
+            color: #6585a3;
+            margin-top: 0.3rem;
+        }
+
+        .chart-container {
+            background: rgba(255,255,255,0.5);
+            border-radius: 2rem;
+            padding: 1.8rem 1.5rem 1rem 1.5rem;
+            box-shadow: inset 0 1px 4px rgba(255,255,255,0.8), 0 8px 20px rgba(0,30,50,0.1);
+            backdrop-filter: blur(4px);
+            margin-top: 1rem;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 320px;
+            border-radius: 1.4rem;
+        }
+
+        .footnote {
+            font-size: 0.8rem;
+            color: #5b7993;
+            margin-top: 1.8rem;
+            text-align: right;
+            border-top: 1px dashed #bcd0e2;
+            padding-top: 1.2rem;
+        }
+
+        .badge {
+            background: #d2e6ff;
+            color: #0d3f66;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-left: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-dumbbell"></i> TrackFit</h1>
-            <p>Seguimiento deportivo profesional para tus clientes</p>
-        </header>
-        
-        <div class="app-container">
-            <!-- Panel izquierdo: Formulario de cliente y lista -->
-            <div class="left-panel">
-                <div class="section-card">
-                    <h2 class="section-title"><i class="fas fa-user-plus"></i> Nuevo Cliente</h2>
-                    
-                    <div class="tab-container">
-                        <div class="tab active" data-tab="basic">Datos Básicos</div>
-                        <div class="tab" data-tab="goals">Objetivos</div>
-                        <div class="tab" data-tab="health">Salud</div>
-                        <div class="tab" data-tab="logistics">Logística</div>
-                        <div class="tab" data-tab="nutrition">Nutrición</div>
-                    </div>
-                    
-                    <form id="client-form">
-                        <!-- Datos básicos -->
-                        <div class="tab-content active" id="basic-tab">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name">Nombre completo *</label>
-                                    <input type="text" id="name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="age">Edad *</label>
-                                    <input type="number" id="age" min="15" max="100" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="weight">Peso actual (kg) *</label>
-                                    <input type="number" id="weight" step="0.1" min="30" max="300" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="height">Altura (cm) *</label>
-                                    <input type="number" id="height" min="100" max="250" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="gender">Género *</label>
-                                    <select id="gender" required>
-                                        <option value="">Seleccionar</option>
-                                        <option value="male">Hombre</option>
-                                        <option value="female">Mujer</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="body-fat">% Grasa corporal (opcional)</label>
-                                    <input type="number" id="body-fat" step="0.1" min="5" max="60">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Objetivos y experiencia -->
-                        <div class="tab-content" id="goals-tab">
-                            <div class="form-group">
-                                <label for="objective">¿Qué buscás? *</label>
-                                <select id="objective" required>
-                                    <option value="">Seleccionar objetivo</option>
-                                    <option value="fat-loss">Bajar grasa</option>
-                                    <option value="muscle-gain">Ganar músculo</option>
-                                    <option value="strength">Fuerza pura</option>
-                                    <option value="aesthetics">Estética</option>
-                                    <option value="endurance">Resistencia</option>
-                                    <option value="health">Salud general</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="experience">¿Hace cuánto entrenás?</label>
-                                <input type="text" id="experience" placeholder="Ej: 6 meses, 2 años...">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="max-weights">¿Cuáles son tus pesos máximos hoy (si los sabés)?</label>
-                                <textarea id="max-weights" placeholder="Ej: Press banca: 80kg, Sentadilla: 100kg..."></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="other-sports">¿Hacés algún otro deporte o actividad física?</label>
-                                <textarea id="other-sports" placeholder="Ej: Fútbol 2 veces por semana, natación..."></textarea>
-                            </div>
-                        </div>
-                        
-                        <!-- Salud -->
-                        <div class="tab-content" id="health-tab">
-                            <div class="form-group">
-                                <label for="injuries">¿Tuviste o tenés alguna lesión? (Espalda, rodillas, hombros, etc.)</label>
-                                <textarea id="injuries" placeholder="Ej: Lesión de rodilla en 2020, dolor lumbar ocasional..."></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="medical-conditions">¿Alguna condición médica que deba saber? (Asma, presión, etc.)</label>
-                                <textarea id="medical-conditions" placeholder="Ej: Asma leve, presión arterial alta controlada..."></textarea>
-                            </div>
-                        </div>
-                        
-                        <!-- Logística -->
-                        <div class="tab-content" id="logistics-tab">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="training-days">Días por semana *</label>
-                                    <input type="number" id="training-days" min="1" max="7" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="session-time">Tiempo por sesión (min) *</label>
-                                    <input type="number" id="session-time" min="15" max="240" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="training-location">¿Dónde vas a entrenar? *</label>
-                                <select id="training-location" required>
-                                    <option value="">Seleccionar</option>
-                                    <option value="gym">Gym comercial</option>
-                                    <option value="home">En casa</option>
-                                    <option value="park">Plaza/Parque</option>
-                                    <option value="mix">Mixto (varios lugares)</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="equipment">¿Qué equipo tenés disponible?</label>
-                                <textarea id="equipment" placeholder="Ej: Mancuernas hasta 20kg, colchoneta, banda elástica..."></textarea>
-                            </div>
-                        </div>
-                        
-                        <!-- Nutrición y descanso -->
-                        <div class="tab-content" id="nutrition-tab">
-                            <div class="form-group">
-                                <label for="food-restrictions">¿Qué alimentos NO comés por nada del mundo?</label>
-                                <textarea id="food-restrictions" placeholder="Ej: Mariscos, lácteos, gluten..."></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="supplements">¿Tomás algún suplemento? (Proteína, creatina, etc.)</label>
-                                <textarea id="supplements" placeholder="Ej: Proteína whey después de entrenar, creatina diaria..."></textarea>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="sleep-hours">Horas de sueño por día *</label>
-                                    <input type="number" id="sleep-hours" min="4" max="12" step="0.5" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="work-type">Tipo de trabajo *</label>
-                                    <select id="work-type" required>
-                                        <option value="">Seleccionar</option>
-                                        <option value="sedentary">Sedentario (mucho tiempo sentado)</option>
-                                        <option value="light-active">Ligero (algo de movimiento)</option>
-                                        <option value="moderate-active">Moderado (bastante movimiento)</option>
-                                        <option value="heavy-active">Pesado (físicamente exigente)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <button type="button" id="prev-tab" class="btn"><i class="fas fa-arrow-left"></i> Anterior</button>
-                            <button type="button" id="next-tab" class="btn" style="float: right;">Siguiente <i class="fas fa-arrow-right"></i></button>
-                            <button type="submit" id="submit-client" class="btn btn-success btn-block" style="display: none; margin-top: 10px;"><i class="fas fa-save"></i> Guardar Cliente</button>
-                        </div>
-                    </form>
-                </div>
-                
-                <div class="section-card clients-list">
-                    <h2 class="section-title"><i class="fas fa-users"></i> Mis Clientes</h2>
-                    <div id="clients-container">
-                        <!-- Los clientes se cargarán aquí dinámicamente -->
-                        <div class="empty-state" id="empty-clients">
-                            <i class="fas fa-user-friends"></i>
-                            <h3>No hay clientes registrados</h3>
-                            <p>Comienza agregando tu primer cliente usando el formulario</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Panel derecho: Cálculo calórico y seguimiento -->
-            <div class="right-panel">
-                <div class="section-card">
-                    <h2 class="section-title"><i class="fas fa-calculator"></i> Cálculo Calórico</h2>
-                    
-                    <div class="selected-client-info" id="selected-client-info" style="display: none;">
-                        <div class="client-header">
-                            <div class="client-name" id="calc-client-name"></div>
-                            <div class="client-objective" id="calc-client-objective"></div>
-                        </div>
-                        
-                        <div class="client-details">
-                            <div class="client-detail-item">
-                                <span class="detail-label">Edad</span>
-                                <span class="detail-value" id="calc-client-age"></span>
-                            </div>
-                            <div class="client-detail-item">
-                                <span class="detail-label">Peso</span>
-                                <span class="detail-value" id="calc-client-weight"></span>
-                            </div>
-                            <div class="client-detail-item">
-                                <span class="detail-label">Altura</span>
-                                <span class="detail-value" id="calc-client-height"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="empty-state" id="no-client-selected">
-                        <i class="fas fa-user-check"></i>
-                        <h3>Selecciona un cliente</h3>
-                        <p>Para calcular el gasto calórico, primero selecciona un cliente de la lista</p>
-                    </div>
-                    
-                    <div id="calories-calc" style="display: none;">
-                        <div class="form-group">
-                            <label>Nivel de actividad física</label>
-                            <div class="activity-grid">
-                                <div class="activity-item" data-activity="sedentary">
-                                    <h4>Sedentario</h4>
-                                    <p>Poco o ningún ejercicio</p>
-                                </div>
-                                <div class="activity-item" data-activity="light">
-                                    <h4>Ligero</h4>
-                                    <p>Ejercicio 1-3 días/semana</p>
-                                </div>
-                                <div class="activity-item" data-activity="moderate">
-                                    <h4>Moderado</h4>
-                                    <p>Ejercicio 3-5 días/semana</p>
-                                </div>
-                                <div class="activity-item" data-activity="active">
-                                    <h4>Activo</h4>
-                                    <p>Ejercicio 6-7 días/semana</p>
-                                </div>
-                                <div class="activity-item" data-activity="very-active">
-                                    <h4>Muy Activo</h4>
-                                    <p>Ejercicio intenso diario</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Actividades específicas (horas por semana)</label>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="gym-light">Gym ligero</label>
-                                    <input type="number" id="gym-light" min="0" max="30" step="0.5" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label for="gym-medium">Gym medio</label>
-                                    <input type="number" id="gym-medium" min="0" max="30" step="0.5" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label for="gym-intensive">Gym intensivo</label>
-                                    <input type="number" id="gym-intensive" min="0" max="30" step="0.5" value="0">
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="walk-light">Caminata ligera</label>
-                                    <input type="number" id="walk-light" min="0" max="30" step="0.5" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label for="walk-medium">Caminata media</label>
-                                    <input type="number" id="walk-medium" min="0" max="30" step="0.5" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label for="walk-intensive">Caminata intensiva</label>
-                                    <input type="number" id="walk-intensive" min="0" max="30" step="0.5" value="0">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button class="btn btn-block" id="calculate-calories"><i class="fas fa-calculator"></i> Calcular Gasto Calórico</button>
-                        
-                        <div id="calories-result" class="calories-result" style="display: none;">
-                            <h3 id="total-calories">0 kcal</h3>
-                            <p>Gasto calórico diario total</p>
-                            
-                            <div class="calories-breakdown">
-                                <div class="calories-breakdown-item">
-                                    <h4>TMB</h4>
-                                    <p id="tmb-calories">0 kcal</p>
-                                    <small>Metabolismo basal</small>
-                                </div>
-                                <div class="calories-breakdown-item">
-                                    <h4>Actividad</h4>
-                                    <p id="activity-calories">0 kcal</p>
-                                    <small>Ejercicio + movimiento</small>
-                                </div>
-                                <div class="calories-breakdown-item">
-                                    <h4>Digestión</h4>
-                                    <p id="digestion-calories">0 kcal</p>
-                                    <small>Efecto térmico alimentos</small>
-                                </div>
-                            </div>
-                            
-                            <div style="margin-top: 20px;">
-                                <button class="btn btn-success" id="save-calculation"><i class="fas fa-save"></i> Guardar Cálculo</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="section-card">
-                    <h2 class="section-title"><i class="fas fa-chart-line"></i> Seguimiento</h2>
-                    
-                    <div id="tracking-info" style="display: none;">
-                        <div class="client-details" style="margin-bottom: 20px;">
-                            <div class="client-detail-item">
-                                <span class="detail-label">Días entrenamiento</span>
-                                <span class="detail-value" id="track-training-days"></span>
-                            </div>
-                            <div class="client-detail-item">
-                                <span class="detail-label">Tiempo/sesión</span>
-                                <span class="detail-value" id="track-session-time"></span>
-                            </div>
-                            <div class="client-detail-item">
-                                <span class="detail-label">Lugar</span>
-                                <span class="detail-value" id="track-location"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="tracking-date">Fecha de seguimiento</label>
-                            <input type="date" id="tracking-date" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="current-weight">Peso actual (kg)</label>
-                            <input type="number" id="current-weight" step="0.1" min="30" max="300">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="progress-notes">Notas de progreso</label>
-                            <textarea id="progress-notes" placeholder="Ej: Mejoró técnica en sentadilla, aumentó peso en press banca..."></textarea>
-                        </div>
-                        
-                        <button class="btn btn-block" id="save-tracking"><i class="fas fa-plus-circle"></i> Registrar Seguimiento</button>
-                        
-                        <div class="activity-log" id="tracking-log">
-                            <!-- Registros de seguimiento se cargarán aquí -->
-                        </div>
-                    </div>
-                    
-                    <div class="empty-state" id="no-tracking-selected">
-                        <i class="fas fa-clipboard-list"></i>
-                        <h3>Sin cliente seleccionado</h3>
-                        <p>Selecciona un cliente para ver y registrar su seguimiento</p>
-                    </div>
-                </div>
-            </div>
+<div class="card">
+    <h1>📈 Proyector de inversión + aportes</h1>
+    <div class="subtitle">TNA · aportes periódicos · interés compuesto diario · TEA</div>
+
+    <!-- FORMULARIO -->
+    <div class="grid-form">
+        <div class="input-group">
+            <label><span>💰</span> Monto inicial</label>
+            <input type="number" id="montoInicial" class="input-field" step="any" min="0" value="10000" placeholder="ej: 10000">
         </div>
-        
-        <footer>
-            <p>TrackFit &copy; 2023 - Aplicación de seguimiento deportivo para profesionales</p>
-            <p>Los datos se guardan localmente en tu navegador</p>
-        </footer>
-    </div>
-    
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notification-text">Operación completada con éxito</span>
+        <div class="input-group">
+            <label><span>📅</span> Tiempo (días)</label>
+            <input type="number" id="dias" class="input-field" step="1" min="1" value="365" placeholder="ej: 365">
+        </div>
+        <div class="input-group">
+            <label><span>⚡</span> TNA %</label>
+            <input type="number" id="tna" class="input-field" step="any" min="0" value="30" placeholder="ej: 30">
+        </div>
+        <div class="input-group">
+            <label><span>🔄</span> Cada X días aporto</label>
+            <input type="number" id="intervalo" class="input-field" step="1" min="1" value="30" placeholder="ej: 30">
+        </div>
+        <div class="input-group">
+            <label><span>➕</span> Monto a agregar</label>
+            <input type="number" id="aporte" class="input-field" step="any" min="0" value="500" placeholder="ej: 500">
+        </div>
     </div>
 
-    <script>
-        // Datos y estado de la aplicación
-        let clients = JSON.parse(localStorage.getItem('trackfit_clients')) || [];
-        let currentClientId = null;
-        let currentTab = 'basic';
-        let selectedActivityLevel = 'moderate';
-        
-        // Constantes para cálculo calórico
-        const ACTIVITY_MET_VALUES = {
-            'gym-light': 3.5,
-            'gym-medium': 5.0,
-            'gym-intensive': 7.0,
-            'walk-light': 3.0,
-            'walk-medium': 4.0,
-            'walk-intensive': 5.0
-        };
-        
-        const ACTIVITY_FACTORS = {
-            'sedentary': 1.2,
-            'light': 1.375,
-            'moderate': 1.55,
-            'active': 1.725,
-            'very-active': 1.9
-        };
-        
-        // Inicialización de la aplicación
-        document.addEventListener('DOMContentLoaded', function() {
-            // Cargar clientes si existen
-            loadClients();
-            
-            // Configurar navegación por pestañas
-            setupTabNavigation();
-            
-            // Configurar actividad física seleccionable
-            setupActivitySelection();
-            
-            // Configurar eventos del formulario
-            setupFormEvents();
-            
-            // Configurar eventos de cálculo calórico
-            setupCaloriesCalculator();
-            
-            // Configurar eventos de seguimiento
-            setupTrackingEvents();
-        });
-        
-        // Cargar y mostrar clientes
-        function loadClients() {
-            const clientsContainer = document.getElementById('clients-container');
-            const emptyState = document.getElementById('empty-clients');
-            
-            if (clients.length === 0) {
-                emptyState.style.display = 'block';
+    <button class="button" id="calcularBtn">🔮 Calcular proyección</button>
+
+    <!-- RESULTADOS DESTACADOS -->
+    <div class="results-grid" id="resultados">
+        <div class="metric">
+            <div class="label">TEA (efectiva anual)</div>
+            <div class="value" id="teaValue">—</div>
+            <div class="sub">basada en TNA diaria</div>
+        </div>
+        <div class="metric">
+            <div class="label">Capital final</div>
+            <div class="value" id="finalValue">—</div>
+            <div class="sub">después de <span id="diasLabel">365</span> días</div>
+        </div>
+        <div class="metric">
+            <div class="label">Interés total generado</div>
+            <div class="value" id="interesTotal">—</div>
+            <div class="sub">ganancia por encima de aportes</div>
+        </div>
+    </div>
+
+    <!-- GRÁFICA: intereses generados cada día -->
+    <div class="chart-container">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <span style="font-weight:600; color:#1b3b5c;">📊 Interés generado por día</span>
+            <span class="badge">simulación día a día</span>
+        </div>
+        <canvas id="interesChart"></canvas>
+        <p class="footnote">⚡ Los aportes se añaden <strong>al inicio del día de aporte</strong> (antes del interés diario).</p>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Referencias DOM
+        const montoInput = document.getElementById('montoInicial');
+        const diasInput = document.getElementById('dias');
+        const tnaInput = document.getElementById('tna');
+        const intervaloInput = document.getElementById('intervalo');
+        const aporteInput = document.getElementById('aporte');
+        const calcularBtn = document.getElementById('calcularBtn');
+        const teaSpan = document.getElementById('teaValue');
+        const finalSpan = document.getElementById('finalValue');
+        const interesTotalSpan = document.getElementById('interesTotal');
+        const diasLabel = document.getElementById('diasLabel');
+        const ctx = document.getElementById('interesChart').getContext('2d');
+
+        let chartInstance = null;
+
+        function formatearMoneda(valor) {
+            return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(valor);
+        }
+
+        function formatearPorcentaje(valor) {
+            return valor.toFixed(2) + '%';
+        }
+
+        function calcular() {
+            // Leer valores
+            const P0 = parseFloat(montoInput.value) || 0;
+            const N = parseInt(diasInput.value) || 0;
+            const tnaPorc = parseFloat(tnaInput.value) || 0;
+            const intervalo = parseInt(intervaloInput.value) || 1;  // evitar división por cero
+            const aporte = parseFloat(aporteInput.value) || 0;
+
+            // Validaciones básicas
+            if (N <= 0 || intervalo <= 0) {
+                alert('El tiempo y el intervalo deben ser números positivos.');
                 return;
             }
-            
-            emptyState.style.display = 'none';
-            clientsContainer.innerHTML = '';
-            
-            clients.forEach(client => {
-                const clientElement = document.createElement('div');
-                clientElement.className = 'client-item';
-                if (client.id === currentClientId) {
-                    clientElement.classList.add('selected');
-                }
-                
-                clientElement.innerHTML = `
-                    <div class="client-header">
-                        <div class="client-name">${client.name}</div>
-                        <div class="client-objective">${getObjectiveText(client.objective)}</div>
-                    </div>
-                    <div class="client-details">
-                        <div class="client-detail-item">
-                            <span class="detail-label">Edad</span>
-                            <span class="detail-value">${client.age} años</span>
-                        </div>
-                        <div class="client-detail-item">
-                            <span class="detail-label">Peso</span>
-                            <span class="detail-value">${client.weight} kg</span>
-                        </div>
-                        <div class="client-detail-item">
-                            <span class="detail-label">Altura</span>
-                            <span class="detail-value">${client.height} cm</span>
-                        </div>
-                    </div>
-                `;
-                
-                clientElement.addEventListener('click', () => selectClient(client.id));
-                clientsContainer.appendChild(clientElement);
-            });
-        }
-        
-        // Seleccionar un cliente
-        function selectClient(clientId) {
-            currentClientId = clientId;
-            loadClients();
-            
-            const client = clients.find(c => c.id === clientId);
-            if (!client) return;
-            
-            // Mostrar información del cliente en el panel de cálculo
-            document.getElementById('selected-client-info').style.display = 'block';
-            document.getElementById('no-client-selected').style.display = 'none';
-            document.getElementById('calories-calc').style.display = 'block';
-            
-            document.getElementById('calc-client-name').textContent = client.name;
-            document.getElementById('calc-client-objective').textContent = getObjectiveText(client.objective);
-            document.getElementById('calc-client-age').textContent = `${client.age} años`;
-            document.getElementById('calc-client-weight').textContent = `${client.weight} kg`;
-            document.getElementById('calc-client-height').textContent = `${client.height} cm`;
-            
-            // Mostrar información de seguimiento
-            document.getElementById('tracking-info').style.display = 'block';
-            document.getElementById('no-tracking-selected').style.display = 'none';
-            
-            document.getElementById('track-training-days').textContent = `${client.trainingDays} días/sem`;
-            document.getElementById('track-session-time').textContent = `${client.sessionTime} min`;
-            document.getElementById('track-location').textContent = getLocationText(client.trainingLocation);
-            
-            // Cargar seguimientos previos
-            loadTrackingLog(clientId);
-            
-            // Ocultar resultado de cálculo anterior
-            document.getElementById('calories-result').style.display = 'none';
-        }
-        
-        // Configurar navegación por pestañas del formulario
-        function setupTabNavigation() {
-            const tabs = document.querySelectorAll('.tab');
-            const prevBtn = document.getElementById('prev-tab');
-            const nextBtn = document.getElementById('next-tab');
-            const submitBtn = document.getElementById('submit-client');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    switchTab(tabId);
-                });
-            });
-            
-            prevBtn.addEventListener('click', () => {
-                const tabOrder = ['basic', 'goals', 'health', 'logistics', 'nutrition'];
-                const currentIndex = tabOrder.indexOf(currentTab);
-                if (currentIndex > 0) {
-                    switchTab(tabOrder[currentIndex - 1]);
-                }
-            });
-            
-            nextBtn.addEventListener('click', () => {
-                const tabOrder = ['basic', 'goals', 'health', 'logistics', 'nutrition'];
-                const currentIndex = tabOrder.indexOf(currentTab);
-                
-                // Validar pestaña actual antes de avanzar
-                if (validateCurrentTab()) {
-                    if (currentIndex < tabOrder.length - 1) {
-                        switchTab(tabOrder[currentIndex + 1]);
-                    }
-                }
-            });
-            
-            // Inicializar primera pestaña
-            switchTab('basic');
-        }
-        
-        // Cambiar pestaña
-        function switchTab(tabId) {
-            // Ocultar todas las pestañas
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Mostrar pestaña seleccionada
-            document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
-            document.getElementById(`${tabId}-tab`).classList.add('active');
-            
-            currentTab = tabId;
-            
-            // Actualizar botones
-            const prevBtn = document.getElementById('prev-tab');
-            const nextBtn = document.getElementById('next-tab');
-            const submitBtn = document.getElementById('submit-client');
-            
-            const tabOrder = ['basic', 'goals', 'health', 'logistics', 'nutrition'];
-            const currentIndex = tabOrder.indexOf(tabId);
-            
-            prevBtn.style.display = currentIndex === 0 ? 'none' : 'inline-block';
-            
-            if (currentIndex === tabOrder.length - 1) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'block';
-            } else {
-                nextBtn.style.display = 'inline-block';
-                submitBtn.style.display = 'none';
+            if (P0 < 0 || tnaPorc < 0 || aporte < 0) {
+                alert('Los valores no pueden ser negativos.');
+                return;
             }
-        }
-        
-        // Validar pestaña actual
-        function validateCurrentTab() {
-            switch(currentTab) {
-                case 'basic':
-                    const name = document.getElementById('name').value;
-                    const age = document.getElementById('age').value;
-                    const weight = document.getElementById('weight').value;
-                    const height = document.getElementById('height').value;
-                    const gender = document.getElementById('gender').value;
-                    
-                    if (!name || !age || !weight || !height || !gender) {
-                        showNotification('Por favor completa todos los campos obligatorios', 'error');
-                        return false;
-                    }
-                    return true;
-                    
-                case 'logistics':
-                    const trainingDays = document.getElementById('training-days').value;
-                    const sessionTime = document.getElementById('session-time').value;
-                    const trainingLocation = document.getElementById('training-location').value;
-                    
-                    if (!trainingDays || !sessionTime || !trainingLocation) {
-                        showNotification('Por favor completa todos los campos obligatorios', 'error');
-                        return false;
-                    }
-                    return true;
-                    
-                case 'nutrition':
-                    const sleepHours = document.getElementById('sleep-hours').value;
-                    const workType = document.getElementById('work-type').value;
-                    
-                    if (!sleepHours || !workType) {
-                        showNotification('Por favor completa todos los campos obligatorios', 'error');
-                        return false;
-                    }
-                    return true;
-                    
-                default:
-                    return true;
+
+            // Tasa diaria efectiva (TNA lineal / 365)
+            const diario = tnaPorc / 100 / 365;
+
+            // TEA: (1+diario)^365 -1
+            const tea = (Math.pow(1 + diario, 365) - 1) * 100;
+
+            // Simulación día a día
+            let balance = P0;
+            const interesesDiarios = [];
+            const diasArray = [];
+
+            // Para calcular aportes totales y ver interés puro
+            let totalAportes = 0;
+
+            for (let dia = 1; dia <= N; dia++) {
+                // 1) Agregar aporte si corresponde (asumimos inicio del día de aporte)
+                // Aporte en día 'intervalo', '2*intervalo', ...
+                if (dia % intervalo === 0) {
+                    balance += aporte;
+                    totalAportes += aporte;
+                }
+
+                // 2) Calcular interés del día (sobre el balance actual, que ya incluye posible aporte de hoy)
+                const interesHoy = balance * diario;
+                interesesDiarios.push(interesHoy);
+                diasArray.push(dia);
+
+                // 3) Capitalizar interés (se suma al balance)
+                balance += interesHoy;
             }
-        }
-        
-        // Configurar selección de nivel de actividad
-        function setupActivitySelection() {
-            const activityItems = document.querySelectorAll('.activity-item');
-            
-            activityItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Remover selección previa
-                    activityItems.forEach(i => i.classList.remove('selected'));
-                    
-                    // Seleccionar actual
-                    this.classList.add('selected');
-                    selectedActivityLevel = this.getAttribute('data-activity');
-                });
-            });
-            
-            // Seleccionar "Moderado" por defecto
-            document.querySelector('.activity-item[data-activity="moderate"]').classList.add('selected');
-        }
-        
-        // Configurar eventos del formulario
-        function setupFormEvents() {
-            const form = document.getElementById('client-form');
-            
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Validar todos los campos obligatorios
-                if (!validateCurrentTab()) {
-                    // Ir a la primera pestaña con error
-                    const tabOrder = ['basic', 'goals', 'health', 'logistics', 'nutrition'];
-                    for (const tab of tabOrder) {
-                        switchTab(tab);
-                        if (!validateCurrentTab()) {
-                            break;
+
+            // Balance final ya está en 'balance'
+            const capitalFinal = balance;
+
+            // Interés total generado = capitalFinal - (P0 + totalAportes)
+            const interesTotalGanado = capitalFinal - (P0 + totalAportes);
+
+            // Actualizar etiquetas
+            diasLabel.innerText = N;
+            teaSpan.innerText = formatearPorcentaje(tea);
+            finalSpan.innerText = formatearMoneda(capitalFinal);
+            interesTotalSpan.innerText = formatearMoneda(interesTotalGanado);
+
+            // Actualizar gráfica
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Si hay muchos días (> 600) mostramos solo una muestra para no saturar, pero Chart.js puede con bastante.
+            // Para mejor visualización, limitamos a 600 puntos, si es más, diezmeamos.
+            let labels = diasArray;
+            let datos = interesesDiarios;
+
+            const MAX_POINTS = 600;
+            if (N > MAX_POINTS) {
+                const paso = Math.ceil(N / MAX_POINTS);
+                labels = [];
+                datos = [];
+                for (let i = 0; i < diasArray.length; i += paso) {
+                    labels.push(diasArray[i]);
+                    datos.push(interesesDiarios[i]);
+                }
+                // Aseguramos el último día para ver el final
+                if (labels[labels.length-1] !== N) {
+                    labels.push(N);
+                    datos.push(interesesDiarios[N-1]);
+                }
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Interés del día ($)',
+                        data: datos,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.2,
+                        pointRadius: 1.5,
+                        pointHoverRadius: 5,
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    let label = context.dataset.label || '';
+                                    let val = context.parsed.y;
+                                    return `${label} $${val.toFixed(2)}`;
+                                }
+                            }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Día',
+                                color: '#2b4f6e',
+                                font: { weight: '500' }
+                            },
+                            grid: { color: 'rgba(0,30,60,0.05)' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Interés ($)',
+                                color: '#2b4f6e',
+                                font: { weight: '500' }
+                            },
+                            ticks: {
+                                callback: (val) => '$' + val.toFixed(0)
+                            },
+                            grid: { color: 'rgba(0,30,60,0.05)' }
                         }
                     }
-                    return;
                 }
-                
-                // Crear objeto cliente
-                const client = {
-                    id: Date.now().toString(),
-                    name: document.getElementById('name').value,
-                    age: parseInt(document.getElementById('age').value),
-                    weight: parseFloat(document.getElementById('weight').value),
-                    height: parseInt(document.getElementById('height').value),
-                    gender: document.getElementById('gender').value,
-                    bodyFat: document.getElementById('body-fat').value ? parseFloat(document.getElementById('body-fat').value) : null,
-                    objective: document.getElementById('objective').value,
-                    experience: document.getElementById('experience').value,
-                    maxWeights: document.getElementById('max-weights').value,
-                    otherSports: document.getElementById('other-sports').value,
-                    injuries: document.getElementById('injuries').value,
-                    medicalConditions: document.getElementById('medical-conditions').value,
-                    trainingDays: parseInt(document.getElementById('training-days').value),
-                    sessionTime: parseInt(document.getElementById('session-time').value),
-                    trainingLocation: document.getElementById('training-location').value,
-                    equipment: document.getElementById('equipment').value,
-                    foodRestrictions: document.getElementById('food-restrictions').value,
-                    supplements: document.getElementById('supplements').value,
-                    sleepHours: parseFloat(document.getElementById('sleep-hours').value),
-                    workType: document.getElementById('work-type').value,
-                    createdAt: new Date().toISOString(),
-                    tracking: []
-                };
-                
-                // Agregar cliente a la lista
-                clients.push(client);
-                
-                // Guardar en localStorage
-                localStorage.setItem('trackfit_clients', JSON.stringify(clients));
-                
-                // Limpiar formulario
-                form.reset();
-                
-                // Volver a la primera pestaña
-                switchTab('basic');
-                
-                // Recargar lista de clientes
-                loadClients();
-                
-                // Seleccionar el nuevo cliente
-                selectClient(client.id);
-                
-                // Mostrar notificación
-                showNotification(`Cliente ${client.name} agregado exitosamente`);
             });
         }
-        
-        // Configurar calculadora de calorías
-        function setupCaloriesCalculator() {
-            document.getElementById('calculate-calories').addEventListener('click', function() {
-                if (!currentClientId) {
-                    showNotification('Primero selecciona un cliente', 'error');
-                    return;
-                }
-                
-                const client = clients.find(c => c.id === currentClientId);
-                if (!client) return;
-                
-                // Obtener horas de actividad por semana
-                const gymLight = parseFloat(document.getElementById('gym-light').value) || 0;
-                const gymMedium = parseFloat(document.getElementById('gym-medium').value) || 0;
-                const gymIntensive = parseFloat(document.getElementById('gym-intensive').value) || 0;
-                const walkLight = parseFloat(document.getElementById('walk-light').value) || 0;
-                const walkMedium = parseFloat(document.getElementById('walk-medium').value) || 0;
-                const walkIntensive = parseFloat(document.getElementById('walk-intensive').value) || 0;
-                
-                // Calcular calorías
-                const result = calculateCalories(client, selectedActivityLevel, {
-                    gymLight, gymMedium, gymIntensive,
-                    walkLight, walkMedium, walkIntensive
-                });
-                
-                // Mostrar resultados
-                document.getElementById('total-calories').textContent = `${Math.round(result.total)} kcal`;
-                document.getElementById('tmb-calories').textContent = `${Math.round(result.tmb)} kcal`;
-                document.getElementById('activity-calories').textContent = `${Math.round(result.activity)} kcal`;
-                document.getElementById('digestion-calories').textContent = `${Math.round(result.digestion)} kcal`;
-                
-                document.getElementById('calories-result').style.display = 'block';
-            });
-            
-            document.getElementById('save-calculation').addEventListener('click', function() {
-                if (!currentClientId) return;
-                
-                const client = clients.find(c => c.id === currentClientId);
-                if (!client) return;
-                
-                // Obtener valores actuales de actividad
-                const gymLight = parseFloat(document.getElementById('gym-light').value) || 0;
-                const gymMedium = parseFloat(document.getElementById('gym-medium').value) || 0;
-                const gymIntensive = parseFloat(document.getElementById('gym-intensive').value) || 0;
-                const walkLight = parseFloat(document.getElementById('walk-light').value) || 0;
-                const walkMedium = parseFloat(document.getElementById('walk-medium').value) || 0;
-                const walkIntensive = parseFloat(document.getElementById('walk-intensive').value) || 0;
-                
-                // Calcular calorías
-                const result = calculateCalories(client, selectedActivityLevel, {
-                    gymLight, gymMedium, gymIntensive,
-                    walkLight, walkMedium, walkIntensive
-                });
-                
-                // Guardar cálculo en el cliente
-                client.lastCalorieCalculation = {
-                    date: new Date().toISOString(),
-                    totalCalories: Math.round(result.total),
-                    tmb: Math.round(result.tmb),
-                    activityCalories: Math.round(result.activity),
-                    digestionCalories: Math.round(result.digestion),
-                    activityLevel: selectedActivityLevel,
-                    activityHours: { gymLight, gymMedium, gymIntensive, walkLight, walkMedium, walkIntensive }
-                };
-                
-                // Actualizar localStorage
-                localStorage.setItem('trackfit_clients', JSON.stringify(clients));
-                
-                showNotification('Cálculo guardado exitosamente');
-            });
-        }
-        
-        // Calcular gasto calórico
-        function calculateCalories(client, activityLevel, activityHours) {
-            // 1. Calcular TMB (Tasa Metabólica Basal) - Fórmula de Mifflin-St Jeor
-            let tmb;
-            if (client.gender === 'male') {
-                tmb = 10 * client.weight + 6.25 * client.height - 5 * client.age + 5;
-            } else {
-                tmb = 10 * client.weight + 6.25 * client.height - 5 * client.age - 161;
-            }
-            
-            // 2. Calcular efecto térmico de los alimentos (ETA) - 10% del TMB
-            const digestion = tmb * 0.1;
-            
-            // 3. Calcular calorías de actividad física específica por semana
-            let weeklyActivityCalories = 0;
-            
-            // Gym ligero: MET = 3.5
-            weeklyActivityCalories += activityHours.gymLight * ACTIVITY_MET_VALUES['gym-light'] * client.weight;
-            
-            // Gym medio: MET = 5.0
-            weeklyActivityCalories += activityHours.gymMedium * ACTIVITY_MET_VALUES['gym-medium'] * client.weight;
-            
-            // Gym intensivo: MET = 7.0
-            weeklyActivityCalories += activityHours.gymIntensive * ACTIVITY_MET_VALUES['gym-intensive'] * client.weight;
-            
-            // Caminata ligera: MET = 3.0
-            weeklyActivityCalories += activityHours.walkLight * ACTIVITY_MET_VALUES['walk-light'] * client.weight;
-            
-            // Caminata media: MET = 4.0
-            weeklyActivityCalories += activityHours.walkMedium * ACTIVITY_MET_VALUES['walk-medium'] * client.weight;
-            
-            // Caminata intensiva: MET = 5.0
-            weeklyActivityCalories += activityHours.walkIntensive * ACTIVITY_MET_VALUES['walk-intensive'] * client.weight;
-            
-            // Convertir a calorías diarias (dividir entre 7 días)
-            const dailyActivityCalories = weeklyActivityCalories / 7;
-            
-            // 4. Calcular calorías de actividad general (factor de actividad)
-            const activityFactor = ACTIVITY_FACTORS[activityLevel];
-            const generalActivityCalories = tmb * (activityFactor - 1);
-            
-            // 5. Calcular total
-            const total = tmb + digestion + generalActivityCalories + dailyActivityCalories;
-            
-            return {
-                tmb,
-                digestion,
-                activity: generalActivityCalories + dailyActivityCalories,
-                total
-            };
-        }
-        
-        // Configurar eventos de seguimiento
-        function setupTrackingEvents() {
-            document.getElementById('save-tracking').addEventListener('click', function() {
-                if (!currentClientId) {
-                    showNotification('Primero selecciona un cliente', 'error');
-                    return;
-                }
-                
-                const trackingDate = document.getElementById('tracking-date').value;
-                const currentWeight = document.getElementById('current-weight').value;
-                const progressNotes = document.getElementById('progress-notes').value;
-                
-                if (!trackingDate) {
-                    showNotification('La fecha es obligatoria', 'error');
-                    return;
-                }
-                
-                const client = clients.find(c => c.id === currentClientId);
-                if (!client) return;
-                
-                // Crear registro de seguimiento
-                const trackingEntry = {
-                    id: Date.now().toString(),
-                    date: trackingDate,
-                    weight: currentWeight ? parseFloat(currentWeight) : null,
-                    notes: progressNotes,
-                    createdAt: new Date().toISOString()
-                };
-                
-                // Agregar al cliente
-                if (!client.tracking) client.tracking = [];
-                client.tracking.push(trackingEntry);
-                
-                // Actualizar peso actual si se proporcionó
-                if (currentWeight) {
-                    client.weight = parseFloat(currentWeight);
-                }
-                
-                // Actualizar localStorage
-                localStorage.setItem('trackfit_clients', JSON.stringify(clients));
-                
-                // Limpiar formulario
-                document.getElementById('tracking-date').value = '';
-                document.getElementById('current-weight').value = '';
-                document.getElementById('progress-notes').value = '';
-                
-                // Actualizar log de seguimiento
-                loadTrackingLog(currentClientId);
-                
-                // Actualizar información del cliente en la interfaz
-                document.getElementById('calc-client-weight').textContent = `${client.weight} kg`;
-                
-                showNotification('Seguimiento registrado exitosamente');
-            });
-            
-            // Establecer fecha actual por defecto
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('tracking-date').value = today;
-        }
-        
-        // Cargar registro de seguimiento
-        function loadTrackingLog(clientId) {
-            const client = clients.find(c => c.id === clientId);
-            if (!client) return;
-            
-            const trackingLog = document.getElementById('tracking-log');
-            
-            if (!client.tracking || client.tracking.length === 0) {
-                trackingLog.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-clipboard"></i>
-                        <p>No hay seguimientos registrados aún</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Ordenar por fecha (más reciente primero)
-            client.tracking.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            trackingLog.innerHTML = '';
-            
-            client.tracking.forEach(entry => {
-                const entryElement = document.createElement('div');
-                entryElement.className = 'activity-log-item';
-                
-                const date = new Date(entry.date);
-                const formattedDate = date.toLocaleDateString('es-ES', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                });
-                
-                entryElement.innerHTML = `
-                    <div>
-                        <div class="activity-log-date">${formattedDate}</div>
-                        <div>${entry.notes || 'Sin notas'}</div>
-                        ${entry.weight ? `<div><strong>Peso:</strong> ${entry.weight} kg</div>` : ''}
-                    </div>
-                    <div class="activity-log-actions">
-                        <button class="btn btn-danger btn-sm delete-tracking" data-id="${entry.id}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                
-                trackingLog.appendChild(entryElement);
-            });
-            
-            // Agregar eventos a botones de eliminar
-            document.querySelectorAll('.delete-tracking').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const entryId = this.getAttribute('data-id');
-                    deleteTrackingEntry(clientId, entryId);
-                });
-            });
-        }
-        
-        // Eliminar entrada de seguimiento
-        function deleteTrackingEntry(clientId, entryId) {
-            if (!confirm('¿Estás seguro de que quieres eliminar este registro de seguimiento?')) {
-                return;
-            }
-            
-            const client = clients.find(c => c.id === clientId);
-            if (!client || !client.tracking) return;
-            
-            // Filtrar la entrada a eliminar
-            client.tracking = client.tracking.filter(entry => entry.id !== entryId);
-            
-            // Actualizar localStorage
-            localStorage.setItem('trackfit_clients', JSON.stringify(clients));
-            
-            // Recargar log
-            loadTrackingLog(clientId);
-            
-            showNotification('Registro eliminado exitosamente');
-        }
-        
-        // Mostrar notificación
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notification-text');
-            
-            notificationText.textContent = message;
-            
-            // Cambiar color según tipo
-            if (type === 'error') {
-                notification.style.backgroundColor = '#e74c3c';
-            } else if (type === 'warning') {
-                notification.style.backgroundColor = '#f39c12';
-            } else {
-                notification.style.backgroundColor = '#27ae60';
-            }
-            
-            notification.classList.add('show');
-            
-            // Ocultar después de 3 segundos
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Funciones auxiliares
-        function getObjectiveText(objective) {
-            const objectives = {
-                'fat-loss': 'Bajar grasa',
-                'muscle-gain': 'Ganar músculo',
-                'strength': 'Fuerza pura',
-                'aesthetics': 'Estética',
-                'endurance': 'Resistencia',
-                'health': 'Salud general'
-            };
-            
-            return objectives[objective] || objective;
-        }
-        
-        function getLocationText(location) {
-            const locations = {
-                'gym': 'Gym comercial',
-                'home': 'En casa',
-                'park': 'Plaza/Parque',
-                'mix': 'Mixto'
-            };
-            
-            return locations[location] || location;
-        }
-    </script>
+
+        // Escuchar click en botón y también al cargar la página (valores por defecto)
+        calcularBtn.addEventListener('click', calcular);
+        window.addEventListener('load', calcular);
+    })();
+</script>
 </body>
 </html>
